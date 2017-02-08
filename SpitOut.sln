@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpitOut", "src\SpitOut.csproj", "{6FDF17AE-DAD6-4FBB-A06E-F65315E53688}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66CD3C23-3335-4CD8-8875-B08F148C55D8}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		examples\annotated_example.xml = examples\annotated_example.xml
+		examples\build_script_template.xml = examples\build_script_template.xml
+		examples\ink_tag_template.xml = examples\ink_tag_template.xml
+		LICENSE = LICENSE
+		examples\ottawa_ink_bay_template.xml = examples\ottawa_ink_bay_template.xml
+		examples\publish_build_template.xml = examples\publish_build_template.xml
+		README.md = README.md
+		spitout_schema_1.0.xsd = spitout_schema_1.0.xsd
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FDF17AE-DAD6-4FBB-A06E-F65315E53688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDF17AE-DAD6-4FBB-A06E-F65315E53688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDF17AE-DAD6-4FBB-A06E-F65315E53688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDF17AE-DAD6-4FBB-A06E-F65315E53688}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

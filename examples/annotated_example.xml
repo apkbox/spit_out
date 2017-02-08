@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<!-- 
+    config is the root element.
+    Optional title attribute allows to override default window title.
+
+    config element can include the following elements
+        selector    - represents a single parameter UI control
+        filesets    - files to generate from template
+        templates   - file templates
+ -->
+<config title="Mood selector">
+    <!--
+        Each selector represents a control on the UI.
+        Attributes:
+            label       specifies selector's UI label. name is used if not specified.
+            name        selector name to be used when referencing in the layout (not yet implemented).
+            default     specifies default choice (name of var element). Default is not set.
+            type        specifies control type (listbox, combobox, checkbox). Default is listbox.
+            hidden      whether the selector is hidden (true, false). Default is false.
+            active      whether the selector is active (expression). Default is true.
+            width       control width (in pixels or literal 'auto'). Default is auto.
+            
+        Selector includes choices, each representing a selectable choice.
+        The checkbox selector must contains at most two choices with
+        names true and false.
+        
+        Active selectors add variables to the resulting variable set that used to resolve 
+        templates. Inactive selector is invisible (regardless of hidden attribute) and
+        does not participate at all.
+        
+        The active attribute is an boolean expression that can reference variables
+        defined by preceding selectors.
+        
+        Expression grammar:
+          start       -> expr
+          expr        -> or_expr
+          or_expr     -> and_expr
+                      -> and_expr 'or' or_expr
+          and_expr    -> unary_expr
+                      -> unary_expr 'and' and_expr
+          unary_expr  -> primary_expr
+                      -> 'not' primary_expr
+          primary_expr-> 'true'
+                      -> 'false'
+                      -> '(' expr ')'
+
+        Before evaluation the expression string is expanded using variables from
+        preceding selectors. Each expanded choice then subsituted as following:
+          empty string      -> false
+          "false"           -> false
+          "true"            -> true
+          non empty string  -> true
+          
+          That is if string is literal "true" or "false" the it is evaluated as boolean.
+    -->
+    <selector name="Weather">
+        <!--
+            Each choice is a choice, where name attribute specifies UI caption.
+        -->
+        <choice name="Sunny">
+            <!--
+                Within choice you can define variables.
+                If variable is defined only in one choice, other choices
+                have it defaulted to an empty string.
+            -->
+            <var name="weather_mood">joyful</var>
+            <var name="weather">sunny</var>
+        </choice>
+        <choice name="Overcast">
+            <var name="weather_mood">just normal</var>
+            <var name="weather">overcast</var>
+        </choice>
+        <choice name="Rainy">
+            <var name="weather_mood">grumpy and sad</var>
+            <var name="weather">rainy</var>
+        </choice>
+    </selector>
+    
+    <!-- 
+        If you hide selector and its variables are used in templates,
+        make sure you designate default choice, otherwise templates will
+        not resolve.
+    -->
+    <selector name="My secret mood tweak" default="false" hidden="true" type="checkbox">
+        <choice name="true">
+            <var name="secret_mood_tweak">But even after that I feel happy.</var>
+        </choice>
+        <choice name="false">
+        </choice>
+    </selector>
+
+    <!-- More selectors if needed... -->
+    
+    <!--
+        File sets allow to define multiple files using one or more templates.
+        If filesets are not defined, then each template results in one file.
+
+        You can see it as if file set file allows partial template resolution
+        after which it becomes a template itself.
+
+        Optional groupby attribute specifies in which order generated content
+        tabs are shown on the UI. You can specify file or template choices.
+    -->
+    <filesets groupby="file">
+        <!--
+            Each fileset produces as many files as file elements defined.
+            You can specify specific template to be used with the file set,
+            then only that template will be used, otherwise all templates
+            will be used.
+        -->
+        <fileset template="mood">
+            <!--
+                Defines a single generated file, you can override UI name.
+                If name is not specified, then template's name is used.
+                If template name not defined, then template's filename is used.
+            -->
+            <file name="Mood for Ann">
+                <!--
+                    You can override variables for the given file.
+                    Note that these variables have precedence over those
+                    defined in selectors.
+                -->
+                <var name="persons_name">Ann</var>
+            </file>
+            <file name="Mood for Joe">
+                <var name="persons_name">Joe</var>
+            </file>
+            <file name="Mood for Felicia">
+                <var name="persons_name">Felicia</var>
+            </file>
+        </fileset>
+
+        <!--
+            Because template name is not specified, this file set will
+            generate for each file and each template.
+
+            This fileset produces four files:
+                My Team with mood template
+                My Team with Side Note template
+                Rest of the world with mood template
+                Rest of the world with Side Note template
+        -->
+        <fileset>
+            <file name="My Team">
+                <var name="persons_name">My team</var>
+            </file>
+            <file name="Rest of the world">
+                <var name="persons_name">World</var>
+            </file>
+        </fileset>
+    </filesets>
+
+  <templates>
+    <!--
+        Each template produces a single file, unless filesets are used.
+        The only mandatory attribute is filename, that specifies file name
+        or file name template.
+        
+        You can give template a UI friendly name using name attribute. This
+        name is also used to reference template in file sets.
+        
+        If generated content is "actionable", you can set runnable attribute, 
+        which will show "Run" button on the UI. By default it will attempt to
+        execute the file. You can override the executable, command line and
+        button caption.
+
+        The run button is disabled unless file exists.
+        
+        The template content (and filename) uses ${variable name} syntax to
+        specify where variable choices should go.
+        
+        If content includes XML reserved characters like less (<), ampersand (&),
+        or quote ("), then you either can substitute these with
+            &lt;    <
+            &amp;   &
+            &quot;  "
+        or include content into <![CDATA[  ...content... ]]>
+        
+        For more information see XML specification.
+    -->
+    <template name="mood" 
+              filename="mood_for_${persons_name}.txt"
+              runnable="true"
+              runexecutable="notepad.exe"
+              runcommandline="&quot;{0}&quot;"
+              runbuttontext="Show in Notepad"><![CDATA[
+Hi! I am ${persons_name}.
+Today is ${weather}. And I am ${weather_mood}.
+${secret_mood_tweak}
+]]>
+    </template>
+
+    <template name="Side Note" filename="side_note_for_${persons_name}.txt">
+This template is used by fileset with no designated template.
+    </template>
+  </templates>
+</config>

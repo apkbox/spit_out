@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<config title="Configure Arizona Build">
+  <quickpicks width="300" selectorspanel="expanded"
+              label="What do you want to build?">
+    <quickpick label="I want Bellingham installer (debug)">
+      <set selector="Product" choice="Bellingham_HB"/>
+      <set selector="Hardware support" choice="Yes"/>
+    </quickpick>
+    <quickpick label="I want Ottawa installer (debug)">
+      <set selector="Product" choice="Ottawa_HB"/>
+      <set selector="Hardware support" choice="Yes"/>
+    </quickpick>
+  </quickpicks>
+
+  <layout type="vstack" color="SkyBlue">
+    <layout type="hstack">
+      <layout type="hstack" group="simple" label="Product options" bordercolor="red">
+        <selector name="Product"/>
+        <selector name="Hardware support" color="blue"/>
+      </layout>
+      <layout type="hstack" group="simple" label="Build configuration"
+              BorderColor="Blue">
+        <selector name="Platform"/>
+        <selector name="Configuration"/>
+      </layout>
+    </layout>
+    <layout type="uniformgrid" rows="1" columns="6" group="expander"
+            expander="expanded"
+            BorderColor="red"
+            label="Extra options" >
+      <selector name="Build target"/>
+      <selector name="What to build?"/>
+      <selector name="Precompiled headers"/>
+      <selector name="Toolset Platform"/>
+      <selector name="Visual Studio"/>
+      <layout type="vstack" color="pink" bordercolor="Teal">
+        <selector name="Cache resources" color="Gray" bordercolor="Silver"/>
+        <selector name="Concurrent build"/>
+        <selector name="Log build"/>
+        <selector name="Detailed summary"/>
+      </layout>
+    </layout>
+  </layout>
+  
+  <!--<layout type="vstack">
+    <layout type="hstack">
+      <selector name="Product"/>
+      <selector name="Hardware support"/>
+      <selector name="Platform"/>
+      <selector name="Configuration"/>
+    </layout>
+    <layout type="hstack">
+      <selector name="Build target"/>
+      <selector name="What to build?"/>
+      <selector name="Precompiled headers"/>
+      <selector name="Toolset Platform"/>
+      <selector name="Visual Studio"/>
+      <layout type="vstack">
+        <selector name="Cache resources"/>
+        <selector name="Concurrent build"/>
+        <selector name="Log build"/>
+        <selector name="Detailed summary"/>
+      </layout>
+    </layout>
+  </layout>-->
+  
+  <selector name="Product" color="red" bordercolor="green">
+    <choice name="Bellingham_HB" label="Bellingham">
+        <var name="PrinterArchitecture">Bellingham_HB</var>
+    </choice>
+    <choice name="Ottawa_HB" label="Ottawa">
+        <var name="PrinterArchitecture">Ottawa_HB</var>
+    </choice>
+  </selector>
+  <selector name="Hardware support" default="Yes">
+    <choice name="Yes">
+        <var name="HardwareSupport">true</var>
+        <var name="SIM_MODE">false</var>
+        <var name="hw_filename_part">hw</var>
+    </choice>
+    <choice name="HWIF simulation">
+        <var name="HardwareSupport">true</var>
+        <var name="SIM_MODE">true</var>
+        <var name="hw_filename_part">hws</var>
+    </choice>
+    <choice name="JC Simulation">
+        <var name="HardwareSupport">false</var>
+        <var name="SIM_MODE">false</var>
+        <var name="hw_filename_part">sim</var>
+    </choice>
+  </selector>
+  <selector name="Platform" default="x64">
+    <choice name="Win32">
+        <var name="Platform">Win32</var>
+    </choice>
+    <choice name="x64">
+        <var name="Platform">x64</var>
+    </choice>
+  </selector>
+  <selector name="Configuration" default="Debug">
+    <choice id="debug" name="Debug">
+        <var name="Configuration">Debug</var>
+    </choice>
+    <choice id="release" name="Release">
+        <var name="Configuration">Release</var>
+    </choice>
+  </selector>
+  <selector name="Build target" default="Installer">
+    <choice name="BuildConfig">
+        <var name="Target">BuildConfig</var>
+    </choice>
+    <choice name="Build">
+        <var name="Target">Build</var>
+    </choice>
+    <choice name="Rebuild">
+        <var name="Target">Rebuild</var>
+    </choice>
+    <choice name="CreateInstallerLayout">
+        <var name="Target">CreateInstallerLayout</var>
+    </choice>
+    <choice name="Installer">
+        <var name="Target">Installer</var>
+    </choice>
+  </selector>
+  <selector name="What to build?" default="Everything">
+    <choice name="Engine only">
+        <var name="Project">engine.proj</var>
+        <var name="ProjectName">engine</var>
+    </choice>
+    <choice name="GUI only">
+        <var name="Project">gui\gui.proj</var>
+        <var name="ProjectName">gui</var>
+    </choice>
+    <choice name="Everything">
+        <var name="Project">Product.proj</var>
+      <var name="ProjectName">all</var>
+    </choice>
+  </selector>
+  <selector name="Precompiled headers" default="Use">
+    <choice name="Use">
+        <var name="UsePrecompiledHeaders">Yes</var>
+        <var name="pch">pch</var>
+    </choice>
+    <choice name="Do not use">
+        <var name="UsePrecompiledHeaders">No</var>
+        <var name="pch">nopch</var>
+    </choice>
+  </selector>
+  <selector name="Toolset Platform" default="x64">
+    <choice name="x86">
+        <var name="ToolsetPlatform">x86</var>
+    </choice>
+    <choice name="x86 cross x64">
+        <var name="ToolsetPlatform">x86_amd64</var>
+    </choice>
+    <choice name="x64">
+        <var name="ToolsetPlatform">x64</var>
+    </choice>
+  </selector>
+  <selector name="Visual Studio" default="2013 (12.0)">
+    <choice name="2008 (9.0)">
+        <var name="MSVCVER">9.0</var>
+        <var name="VSVER">2008</var>
+        <var name="MSBUILD_WORKAROUND">set VC_PROJECT_ENGINE_NOT_USING_REGISTRY_FOR_INIT=1</var>
+        <var name="NOREUSE_WORKAROUND">/nr:false</var>
+    </choice>
+    <choice name="2013 (12.0)">
+        <var name="MSVCVER">12.0</var>
+        <var name="VSVER">2013</var>
+    </choice>
+  </selector>
+  <selector name="Cache resources" default="true" type="checkbox">
+    <choice name="true">
+        <var name="CacheResources">true</var>
+    </choice>
+    <choice name="false">
+        <var name="CacheResources">false</var>
+    </choice>
+  </selector>
+  <selector name="Concurrent build" default="true" type="checkbox">
+    <choice name="true">
+        <var name="multiprocessor_build">/m</var>
+    </choice>
+    <choice name="false">
+    </choice>
+  </selector>
+  <selector name="Log build" default="true" type="checkbox">
+    <choice name="true">
+        <var name="LogToFile" evaluate="true">/fl /flp:LogFile=${Configuration}_msbuild.log</var>
+    </choice>
+  </selector>
+  <selector name="Detailed summary" default="false" type="checkbox">
+    <choice name="true">
+        <var name="detailed_summary">/ds</var>
+    </choice>
+    <choice name="false">
+    </choice>
+  </selector>
+  <templates>
+    <template name="Build script" 
+              filename="${Target}_${ProjectName}_${PrinterArchitecture}_${hw_filename_part}_${Platform}_${Configuration}_vs${VSVER}_${pch}.cmd"
+              runnable="true"
+              runexecutable="cmd.exe"
+              runcommandline="/K &quot;{0}&quot;"
+              runbuttontext="Build">
+      <![CDATA[@echo off
+setlocal
+${MSBUILD_WORKAROUND}
+set VCVARSALL_BAT=%ProgramFiles%\Microsoft Visual Studio ${MSVCVER}\VC\vcvarsall.bat
+if not "%ProgramFiles(x86)%"=="" set VCVARSALL_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio ${MSVCVER}\VC\vcvarsall.bat
+call "%VCVARSALL_BAT%" ${ToolsetPlatform}
+msbuild ${multiprocessor_build} ${LogToFile} ${detailed_summary} /p:PrinterArchitecture=${PrinterArchitecture} ..\${Project}  /p:HardwareSupport=${HardwareSupport} /p:Configuration=${Configuration} /p:Platform=${Platform} /p:UsePrecompiledHeaders=${UsePrecompiledHeaders} /p:UsePrecompressedResources=${CacheResources} /p:VisualStudioVersion=${VSVER} ${NOREUSE_WORKAROUND} /t:${Target}
+endlocal
+]]>
+    </template>
+  </templates>
+</config>
+
+

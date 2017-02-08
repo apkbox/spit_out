@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<config title="Create SpitOut Build Script">
+    <selector name="Platform" default="Any CPU">
+        <choice name="Any CPU">
+            <var name="Platform">Any CPU</var>
+            <var name="PlatformFn">AnyCPU</var>
+        </choice>
+        <choice name="x86">
+            <var name="Platform">x86</var>
+            <var name="PlatformFn">x86</var>
+        </choice>
+        <choice name="x64">
+            <var name="Platform">x64</var>
+            <var name="PlatformFn">x64</var>
+        </choice>
+    </selector>
+    <selector name="Configuration" default="Debug">
+        <choice id="debug" name="Debug">
+            <var name="Configuration">Debug</var>
+        </choice>
+        <choice id="release" name="Release">
+            <var name="Configuration">Release</var>
+        </choice>
+    </selector>
+    <selector name="Build target" default="Build">
+        <choice name="Build">
+            <var name="Target">Build</var>
+        </choice>
+        <choice name="Rebuild">
+            <var name="Target">Rebuild</var>
+        </choice>
+        <choice name="Clean">
+            <var name="Target">Clean</var>
+        </choice>
+    </selector>
+    <selector name="Toolset Platform" default="x86">
+        <choice name="x86">
+            <var name="ToolsetPlatform">x86</var>
+        </choice>
+        <choice name="x86 cross x64">
+            <var name="ToolsetPlatform">x86_amd64</var>
+        </choice>
+        <choice name="x64">
+            <var name="ToolsetPlatform">x64</var>
+        </choice>
+    </selector>
+    <selector name="Visual Studio" default="2013 (12.0)" hidden="true">
+        <choice name="2008 (9.0)">
+            <var name="MSVCVER">9.0</var>
+            <var name="MSBUILD_WORKAROUND">set VC_PROJECT_ENGINE_NOT_USING_REGISTRY_FOR_INIT=1</var>
+            <var name="NOREUSE_WORKAROUND">/nr:false</var>
+        </choice>
+        <choice name="2013 (12.0)">
+            <var name="MSVCVER">12.0</var>
+        </choice>
+    </selector>
+    <selector name="Concurrent build" default="true" type="checkbox">
+        <choice name="true">
+            <var name="multiprocessor_build">/m</var>
+        </choice>
+        <choice name="false">
+        </choice>
+    </selector>
+    <selector name="Log build" default="true" type="checkbox">
+        <choice name="true">
+            <var name="LogToFile">/fl</var>
+        </choice>
+        <choice name="false">
+        </choice>
+    </selector>
+    <selector name="Detailed summary" default="false" type="checkbox">
+        <choice name="true">
+            <var name="detailed_summary">/ds</var>
+        </choice>
+        <choice name="false">
+        </choice>
+    </selector>
+  <templates>
+    <template name="Build script" 
+              filename="${Target}_${PlatformFn}_${Configuration}.cmd"
+              runnable="true"
+              runexecutable="cmd.exe"
+              runcommandline="/K &quot;{0}&quot;"
+              runbuttontext="Build">
+      <![CDATA[@echo off
+setlocal
+${MSBUILD_WORKAROUND}
+set VCVARSALL_BAT=%ProgramFiles%\Microsoft Visual Studio ${MSVCVER}\VC\vcvarsall.bat
+if not "%ProgramFiles(x86)%"=="" set VCVARSALL_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio ${MSVCVER}\VC\vcvarsall.bat
+call "%VCVARSALL_BAT%" ${ToolsetPlatform}
+msbuild ${multiprocessor_build} ${LogToFile} ${detailed_summary} SpitOut.sln /p:Configuration=${Configuration} /p:Platform="${Platform}" ${NOREUSE_WORKAROUND} /t:${Target}
+endlocal
+]]>
+    </template>
+  </templates>
+</config>
+
+

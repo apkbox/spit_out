@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="https://github.com/apkbox/spitout/spitout_schema_1.0.xsd"
+    attributeFormDefault="unqualified"
+    elementFormDefault="qualified"
+    xmlns="https://github.com/apkbox/spitout/spitout_schema_1.0.xsd"
+    xmlns:mstns="https://github.com/apkbox/spitout/spitout_schema_1.0.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:simpleType name="uilength">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:decimal"/>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="auto"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="selectorVisibility">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="visible"/>
+      <xs:enumeration value="hidden"/>
+      <xs:enumeration value="collapsed"/>
+      <xs:enumeration value="expanded"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="uicontrols">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="listbox"/>
+      <xs:enumeration value="combobox"/>
+      <xs:enumeration value="checkbox"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="groupby">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="file"/>
+      <xs:enumeration value="template"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="layoutType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="vstack"/>
+      <xs:enumeration value="hstack"/>
+      <xs:enumeration value="wrappanel"/>
+      <xs:enumeration value="uniformgrid"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="groupingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="simple"/>
+      <xs:enumeration value="expander"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="expanderState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="expanded"/>
+      <xs:enumeration value="collapsed"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="config">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="quickpicks" type="quickpicks"/>
+      <xs:element minOccurs="0" name="layout" type="layout"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="selector" type="selector"/>
+      <xs:element minOccurs="0" name="filesets" type="filesets"/>
+      <xs:element minOccurs="0" name="templates" type="templates"/>
+    </xs:sequence>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="width" type="uilength"/>
+    <xs:attribute name="height" type="uilength"/>
+  </xs:complexType>
+
+  <xs:complexType name="quickpicks">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="quickpick" type="quickpick"/>
+    </xs:sequence>
+    <xs:attribute name="width" type="uilength"/>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="selectorspanel" type="selectorVisibility" default="visible"/>
+  </xs:complexType>
+
+  <xs:complexType name="quickpick">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="set" type="set"/>
+    </xs:sequence>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="width" type="uilength"/>
+  </xs:complexType>
+
+  <xs:complexType name="set">
+    <xs:attribute name="selector" type="xs:string"/>
+    <xs:attribute name="choice" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="layout">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="layout" type="layout"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="selector" type="layout_selector_ref"/>
+    </xs:choice>
+    <xs:attribute name="type" type="layoutType"/>
+    <xs:attribute name="group" type="groupingType"/>
+    <xs:attribute name="expander" type="expanderState"/>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="rows" type="xs:int"/>
+    <xs:attribute name="columns" type="xs:int"/>
+    <xs:attribute name="color" type="xs:string"/>
+    <xs:attribute name="bordercolor" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="layout_selector_ref">
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="selector">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="choice" type="choice"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="default" type="xs:string"/>
+    <xs:attribute name="hidden" type="xs:boolean" default="false"/>
+    <xs:attribute name="active" type="xs:string" default="true"/>
+    <xs:attribute name="type" type="uicontrols" default="listbox"/>
+    <xs:attribute name="width" type="uilength"/>
+    <xs:attribute name="height" type="uilength"/>
+    <xs:attribute name="color" type="xs:string"/>
+    <xs:attribute name="bordercolor" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="choice">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="var" type="var"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="var">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="evaluate" type="xs:boolean" use="optional" default="false"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="filesets">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="fileset" type="fileset"/>
+    </xs:sequence>
+    <xs:attribute name="groupby" type="groupby"/>
+  </xs:complexType>
+
+  <xs:complexType name="fileset">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="file" type="file"/>
+    </xs:sequence>
+    <xs:attribute name="template" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="file">
+    <xs:sequence>
+      <xs:element name="var" type="var"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="templates">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="template" type="template"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="template">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="filename" type="xs:string" use="required"/>
+        <xs:attribute name="runnable" type="xs:boolean"/>
+        <xs:attribute name="runexecutable" type="xs:string"/>
+        <xs:attribute name="runcommandline" type="xs:string"/>
+        <xs:attribute name="runbuttontext" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:element name="config" type="config"/>
+
+</xs:schema>

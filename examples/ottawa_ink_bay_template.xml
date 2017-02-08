@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<config>
+  <selector name="Ink Type" default="OD" type="combobox" width="100">
+    <choice name="OD">
+      <var name="type">OD</var>
+    </choice>
+    <choice name="KO">
+      <var name="type">KO</var>
+    </choice>
+    <choice name="WT">
+      <var name="type">WT</var>
+    </choice>
+    <choice name="KI">
+      <var name="type">KI</var>
+    </choice>
+    <choice name="OD2">
+      <var name="type">OD2</var>
+    </choice>
+    <choice name="KO2">
+      <var name="type">KO2</var>
+    </choice>
+    <choice name="BL">
+      <var name="type">BL</var>
+    </choice>
+    <choice name="KN">
+      <var name="type">KN</var>
+    </choice>
+    <choice name="GF">
+      <var name="type">GF</var>
+    </choice>
+    <choice name="KA">
+      <var name="type">KA</var>
+    </choice>
+    <choice name="GD">
+      <var name="type">GD</var>
+    </choice>
+    <choice name="KV">
+      <var name="type">KV</var>
+    </choice>
+    <choice name="IV">
+      <var name="type">IV</var>
+    </choice>
+    <choice name="WI">
+      <var name="type">WI</var>
+    </choice>
+    <choice name="GW">
+      <var name="type">GW</var>
+    </choice>
+    <choice name="WH">
+      <var name="type">WH</var>
+    </choice>
+    <choice name="ER">
+      <var name="type">ER</var>
+    </choice>
+    <choice name="EY">
+      <var name="type">EY</var>
+    </choice>
+  </selector>
+  <selector name="Capacity (mL)" default="2 L">
+    <choice name="1 L">
+      <var name="capacity">1000</var>
+    </choice>
+    <choice name="1.5 L">
+      <var name="capacity">1500</var>
+    </choice>
+    <choice name="2 L">
+      <var name="capacity">2000</var>
+    </choice>
+    <choice name="5 L">
+      <var name="capacity">5000</var>
+    </choice>
+  </selector>
+  <filesets groupby="file">
+    <fileset>
+      <file name="Port 0">
+        <var name="port">0</var>
+        <var name="color">BLACK</var>
+      </file>
+      <file name="Port 1">
+        <var name="port">1</var>
+        <var name="color">CYAN</var>
+      </file>
+      <file name="Port 2">
+        <var name="port">2</var>
+        <var name="color">MAGENTA</var>
+      </file>
+      <file name="Port 3">
+        <var name="port">3</var>
+        <var name="color">YELLOW</var>
+      </file>
+      <file name="Port 5">
+        <var name="port">5</var>
+        <var name="color">WHITE</var>
+      </file>
+      <file name="Port 6">
+        <var name="port">6</var>
+        <var name="color">VARNISH</var>
+      </file>
+      <file name="Port 7">
+        <var name="port">7</var>
+        <var name="color">LIGHT CYAN</var>
+      </file>
+      <file name="Port 8">
+        <var name="port">8</var>
+        <var name="color">LIGHT MAGENTA</var>
+      </file>
+    </fileset>
+  </filesets>
+  <templates>
+    <template filename="tag${port}.txt"><![CDATA[; This file defines an Arizona RFID tag.
+; Use semicolumn (;) or hash (#) characters to comment out line.
+; Empty lines are skipped.
+; Maximum line length is 255 characters.
+; Field values specified in form "name = value".
+; Name may have leading and trailing whitespaces that are ignored.
+; Name can consist of latin, digits and underscore characters.
+; Names and special values are case insensitive.
+; Value must not be empty and may have leading whitespaces.
+; The trailing whitespaces in the value are not ignored.
+; The following value formats are accepted:
+;	number - ANSI C integral number literal.
+;	date - Date in format year-month-day. Only years since 2000 are accepted.
+;       symbol - symbolic name of the value
+;
+; Values are always first parsed as numeric and only if it fails,
+; symbolic interpretation is attempted.
+;
+; Where specified the follwing special values can be used
+;	auto - Value generated automatically.
+;	now - Date field initialized with today's date.
+;	next_year - Date field initialized with today's date of the next year.
+;
+
+; Specifies RFID tag serial number.
+; number | auto
+serial=auto
+
+; Ink Supplier
+; number
+; 01 - Sericol
+supplier=Sericol
+
+; Ink Type
+; number
+; 1 - OD
+; 2 - KO
+; 3 - WT
+; 4 - KI
+; 5 - OD2
+; 6 - KO2
+; 7 - BL
+; 8 - KN
+; 9 - GF
+; 10 - KA
+; 11 - GD
+; 12 - KV
+; 13 - IV
+; 14 - WI
+; 15 - GW
+; 16 - WH
+; 17 - ER
+; 18 - EY
+ink_type=${type}
+
+; Capacity (mL)
+; number
+capacity=${capacity}
+
+; Manufacturing Date
+; date | now
+mfg_date=2014-01-13
+
+; Expiration Date
+; date | now | next_year
+exp_date=next_year
+
+; Ink Color
+; number | name
+; 0 - CYAN
+; 1 - MAGENTA
+; 2 - YELLOW
+; 3 - BLACK
+; 4 - WHITE
+; 5 - VARNISH
+; 6 - LC | LIGHT CYAN | LIGHT_CYAN | LT_CYAN
+; 7 - LM | LIGHT MAGENTA | LIGHT_MAGENTA | LT_MAGENTA
+; 
+; -2 - FLUSH
+; -3 - AIR ADAPTER
+; -4 - OLD UPGRADE TAG
+; -5 - SINGLE USE SDS
+; -6 - UPGRADE
+ink_color=${color}
+
+; Hash
+; number | auto
+hash=auto
+
+; Lot Number
+; number | auto
+lot_number=314159
+
+; Ink Consumed (uL)
+; number
+consumed=0
+]]>
+    </template>
+  </templates>
+</config>

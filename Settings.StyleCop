@@ -1,0 +1,49 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <BooleanProperty Name="AutoCheckForUpdate">False</BooleanProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>bootstrapper</Value>
+      <Value>dequeue</Value>
+      <Value>enum</Value>
+      <Value>paucal</Value>
+      <Value>shader</Value>
+      <Value>shader's</Value>
+    </CollectionProperty>
+  </GlobalSettings>
+  <Analyzers>
+    <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
+      <Rules>
+        <Rule Name="ElementsMustBeDocumented">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="DocumentationTextMustBeginWithACapitalLetter">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">True</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="DocumentationTextMustEndWithAPeriod">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">True</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings>
+        <StringProperty Name="CompanyName">SpitOut Project</StringProperty>
+        <BooleanProperty Name="IgnorePrivates">True</BooleanProperty>
+        <StringProperty Name="Copyright">Copyright (c) 2016 Alex Kozlov</StringProperty>
+      </AnalyzerSettings>
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.SpacingRules">
+      <Rules>
+        <Rule Name="KeywordsMustBeSpacedCorrectly">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings />
+    </Analyzer>
+  </Analyzers>
+</StyleCopSettings>

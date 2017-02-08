@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <selector label="Select person">
+    <choice label="Brian">
+      <var name="person">Brian</var>
+    </choice>
+    <choice label="Dennis">
+      <var name="person">Dennis</var>
+    </choice>
+    <choice label="Ken">
+      <var name="person">Ken</var>
+    </choice>
+  </selector>
+  <templates>
+    <template filename="greeting_to_${person}.txt"><![CDATA[Hello, ${person}!
+]]>
+    </template>
+  </templates>
+</config>

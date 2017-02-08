@@ -1,0 +1,371 @@
+﻿<UserControl x:Class="SpitOut.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:models="clr-namespace:SpitOut.Models"
+             xmlns:spitOut="clr-namespace:SpitOut"
+             xmlns:layout="clr-namespace:SpitOut.Models.Layout"
+             mc:Ignorable="d po"
+             d:DesignHeight="480" d:DesignWidth="640"
+             d:DataContext="{d:DesignInstance Type=models:ConfigModel, IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <spitOut:SelectorTemplateSelector x:Key="SelectorTemplateSelector"/>
+
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="ListBoxSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Label}" />
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding Choices}"
+                                 DisplayMemberPath="Label"
+                                 SelectedItem="{Binding SelectedChoice}"
+                                 Width="{Binding ControlWidth}"
+                                 Height="{Binding ControlHeight}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="ComboBoxSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Label}" />
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding Choices}" DisplayMemberPath="Label"
+                                  SelectedItem="{Binding SelectedChoice}"
+                                  Width="{Binding ControlWidth}"
+                                  VerticalAlignment="Top"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="CheckBoxSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <CheckBox Margin="5"
+                              IsChecked="{Binding IsChecked}" Width="{Binding ControlWidth}"
+                              VerticalAlignment="Center" Content="{Binding Label}"/>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type layout:VStackLayoutNode}">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type layout:VStackGroupLayoutNode}">
+                <GroupBox Header="{Binding Label}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </GroupBox>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:VStackExpanderLayoutNode}">
+                <Expander Header="{Binding Label}" IsExpanded="{Binding IsExpanded}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Expander>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:HStackLayoutNode}">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type layout:HStackGroupLayoutNode}">
+                <GroupBox Header="{Binding Label}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </GroupBox>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type layout:HStackExpanderLayoutNode}">
+                <Expander Header="{Binding Label}" IsExpanded="{Binding IsExpanded}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Expander>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type layout:UniformGridLayoutNode}">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="{Binding Rows}" Columns="{Binding Columns}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:UniformGridGroupLayoutNode}">
+                <GroupBox Header="{Binding Label}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="{Binding Rows}" Columns="{Binding Columns}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </GroupBox>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:UniformGridExpanderLayoutNode}">
+                <Expander Header="{Binding Label}" IsExpanded="{Binding IsExpanded}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="{Binding Rows}" Columns="{Binding Columns}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Expander>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:WrapPanelLayoutNode}">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:WrapPanelGroupLayoutNode}">
+                <GroupBox Header="{Binding Label}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </GroupBox>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:WrapPanelExpanderLayoutNode}">
+                <Expander Header="{Binding Label}" IsExpanded="{Binding IsExpanded}"
+                          Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding Children}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Expander>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type layout:SelectorLayoutNode}">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                    <ContentControl Content="{Binding Selector}"
+                                    ContentTemplateSelector="{StaticResource SelectorTemplateSelector}"/>
+                </Border>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="SelectorsPanel">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ContentControl Content="{Binding Layout}"/>
+
+                    <ItemsControl Grid.Row="1"
+                                  ItemsSource="{Binding AutoLayoutSelectors}" 
+                                  ItemTemplateSelector="{StaticResource SelectorTemplateSelector}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ExpandableSelectorsPanel">
+                <Expander IsExpanded="{Binding SelectorsPanelExpanded}" 
+                          Visibility="{Binding ShowSelectors, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Content="{Binding}"
+                          ContentTemplate="{StaticResource SelectorsPanel}"
+                          Header="Expand to see more options"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="SelectorsExpandablePanel">
+                <ContentControl x:Name="Panel" Content="{Binding}" ContentTemplate="{StaticResource SelectorsPanel}"/>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding ShowSelectorsExpander}" Value="true">
+                        <Setter TargetName="Panel" Property="ContentTemplate" Value="{StaticResource ExpandableSelectorsPanel}"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <DataTemplate x:Key="FilePanel">
+                <Grid d:DataContext="{d:DesignInstance Type=models:FileTemplate, IsDesignTimeCreatable=True}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button Style="{DynamicResource LinkButton}" Content="{Binding FileName}"
+                            Command="{Binding ShowFileInWindowsExplorerCommand}">
+                    </Button>
+                    <TextBox x:Name="FileContent" Grid.Row="1" Text="{Binding Content}" TextWrapping="Wrap" AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto" />
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsIncomplete}" Value="True">
+                        <Setter TargetName="FileContent" Property="Text"
+                                Value="{Binding UnresolvedVariablesList, Mode=OneWay, StringFormat='The following variables are not resolved: &#10;{0}'}"/>
+                        <Setter TargetName="FileContent" Property="Foreground" Value="Red"/>
+                        <Setter TargetName="FileContent" Property="FontSize" Value="14pt"/>
+                        <Setter TargetName="FileContent" Property="IsReadOnly" Value="True"/>
+                        <Setter TargetName="FileContent" Property="IsReadOnlyCaretVisible" Value="False"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="5"
+                    Width="{Binding QuickpicksWidth}"
+                    HorizontalAlignment="Left"
+                    Visibility="{Binding ShowQuickpicks, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="{Binding QuickpicksLabel}"
+                       Visibility="{Binding HasQuickpicksLabel, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ListBox ItemsSource="{Binding Quickpicks}"
+                     DisplayMemberPath="Label"
+                     SelectedValue="{Binding SelectedQuickpick}"/>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" 
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource SelectorsExpandablePanel}"
+                        Visibility="{Binding ShowSelectors, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <TabControl Grid.Row="2" ItemsSource="{Binding Templates}" Margin="5"
+                    ContentTemplate="{StaticResource FilePanel}"
+                    SelectedItem="{Binding SelectedTemplate}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="ErrorMarker" Source="{StaticResource IncompleteErrorIcon}" Margin="0,0,5,0"
+                               Visibility="Collapsed"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsIncomplete}" Value="True">
+                            <Setter TargetName="ErrorMarker" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+        
+        <Grid Grid.Row="3" Margin="5,0,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Padding="10,5" Command="{Binding SaveAllCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{StaticResource SaveAllIcon}" Margin="0,0,5,0"/>
+                    <TextBlock Text="Save All"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="2" Padding="10,5" Margin="5,0,0,0" Command="{Binding RunCommand}" Content="{Binding}"
+                    Visibility="{Binding IsCurrentTemplateRunnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{StaticResource RunIcon}" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="ButtonText" Text="{Binding RunButtonCaption}"/>
+                        </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RunButtonCaption}" Value="{x:Null}">
+                                <Setter TargetName="ButtonText" Property="Text" Value="Run"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

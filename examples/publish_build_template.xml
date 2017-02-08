@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<config title="Configure Arizona Build">
+    <selector name="INVARIANTS" hidden="true" default="DEFAULT">
+        <choice name="DEFAULT">
+            <var name="JC_DATA_PATH">D:\PFD\HB</var>
+            <var name="TARGET_DIR">bin</var>
+        </choice>
+    </selector>
+
+    <selector name="Product" default="Ottawa_HB">
+        <choice name="Bellingham_HB">
+            <var name="Product">Bellingham_HB</var>
+            <var name="m1200">true</var>
+        </choice>
+        <choice name="Ottawa_HB">
+            <var name="Product">Ottawa_HB</var>
+            <var name="m2200">true</var>
+        </choice>
+    </selector>
+    
+    <selector name="Brand" default="Oce">
+        <choice name="Oce">
+            <var name="is_oce">true</var>
+        </choice>
+        <choice name="FUJI">
+            <var name="is_fuji">true</var>
+        </choice>
+    </selector>
+
+    <selector name="Model" default="OCE 1280 XT" active="${m1200} and ${is_oce}">
+        <choice name="OCE 1240 GT"><var name="model">0x2e</var></choice>
+        <choice name="OCE 1260 GT"><var name="model">0x2f</var></choice>
+        <choice name="OCE 1260 GTL"><var name="model">0x30</var></choice>
+        <choice name="OCE 1280 GT"><var name="model">0x31</var></choice>
+
+        <choice name="OCE 1240 XT"><var name="model">0x32</var></choice>
+        <choice name="OCE 1260 XT"><var name="model">0x33</var></choice>
+        <choice name="OCE 1260 XTL"><var name="model">0x34</var></choice>
+        <choice name="OCE 1280 XT"><var name="model">0x35</var></choice>
+    </selector>
+
+    <selector name="Model" default="FUJI 1280 XT" active="${m1200} and ${is_fuji}">
+        <choice name="FUJI 1240 GT"><var name="model">0x36</var></choice>
+        <choice name="FUJI 1260 GT"><var name="model">0x37</var></choice>
+        <choice name="FUJI 1260 GTL"><var name="model">0x38</var></choice>
+        <choice name="FUJI 1280 GT"><var name="model">0x39</var></choice>
+
+        <choice name="FUJI 1240 XT"><var name="model">0x3a</var></choice>
+        <choice name="FUJI 1260 XT"><var name="model">0x3b</var></choice>
+        <choice name="FUJI 1260 XTL"><var name="model">0x3c</var></choice>
+        <choice name="FUJI 1280 XT"><var name="model">0x3d</var></choice>
+    </selector>
+    
+    <selector name="Model" default="OCE 2280 XT" active="${m2200} and ${is_oce}">
+        <choice name="OCE 2240 GT"><var name="model">0x3e</var></choice>
+        <choice name="OCE 2260 GT"><var name="model">0x3f</var></choice>
+        <choice name="OCE 2260 GTL"><var name="model">0x40</var></choice>
+        <choice name="OCE 2280 GT"><var name="model">0x41</var></choice>
+
+        <choice name="OCE 2240 XT"><var name="model">0x42</var></choice>
+        <choice name="OCE 2260 XT"><var name="model">0x43</var></choice>
+        <choice name="OCE 2260 XTL"><var name="model">0x44</var></choice>
+        <choice name="OCE 2280 XT"><var name="model">0x45</var></choice>
+    </selector>
+
+    <selector name="Model" default="FUJI 2280 XT" active="${m2200} and ${is_fuji}">
+        <choice name="FUJI 2240 GT"><var name="model">0x46</var></choice>
+        <choice name="FUJI 2260 GT"><var name="model">0x47</var></choice>
+        <choice name="FUJI 2260 GTL"><var name="model">0x48</var></choice>
+        <choice name="FUJI 2280 GT"><var name="model">0x49</var></choice>
+
+        <choice name="FUJI 2240 XT"><var name="model">0x4a</var></choice>
+        <choice name="FUJI 2260 XT"><var name="model">0x4b</var></choice>
+        <choice name="FUJI 2260 XTL"><var name="model">0x4c</var></choice>
+        <choice name="FUJI 2280 XT"><var name="model">0x4d</var></choice>
+    </selector>
+
+    <selector name="Configuration" default="Debug">
+        <choice id="debug" name="Debug">
+            <var name="Configuration">Debug</var>
+        </choice>
+        <choice id="release" name="Release">
+            <var name="Configuration">Release</var>
+        </choice>
+    </selector>
+
+    <selector name="R2R enabled" default="true" type="checkbox">
+        <choice name="true">
+            <var name="R2REnabled">1</var>
+        </choice>
+        <choice name="false">
+            <var name="R2REnabled">0</var>
+        </choice>
+    </selector>
+    
+    <selector name="AMS" default="true" type="checkbox">
+        <choice name="true">
+            <var name="AMSEnabled">1</var>
+        </choice>
+        <choice name="false">
+            <var name="AMSEnabled">0</var>
+        </choice>
+    </selector>
+    
+    <selector name="Verbosity" default="5">
+        <choice name="Default"><var name="verbosity"></var></choice>
+        <choice name="1"><var name="verbosity">/v:1</var></choice>
+        <choice name="2"><var name="verbosity">/v:2</var></choice>
+        <choice name="3"><var name="verbosity">/v:3</var></choice>
+        <choice name="4"><var name="verbosity">/v:4</var></choice>
+        <choice name="5"><var name="verbosity">/v:5</var></choice>
+    </selector>
+
+    <selector name="On monitor" default="Default">
+        <choice name="Default"><var name="monitor"></var></choice>
+        <choice name="0"><var name="monitor">/monitor:0</var></choice>
+        <choice name="1"><var name="monitor">/monitor:1</var></choice>
+        <choice name="2"><var name="monitor">/monitor:2</var></choice>
+        <choice name="3"><var name="monitor">/monitor:3</var></choice>
+    </selector>
+
+    <selector name="Clean registry" default="true" type="checkbox">
+        <choice name="true">
+            <var name="cleanreg">reg delete HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /f</var>
+        </choice>
+    </selector>
+
+    <selector name="Developer mode" default="true" type="checkbox">
+        <choice name="true">
+            <var name="devmode">/dev</var>
+        </choice>
+    </selector>
+
+    <selector name="JC Simulation" default="false" type="checkbox">
+        <choice name="true">
+            <var name="simulation">/jc_simulation</var>
+        </choice>
+    </selector>
+
+  <filesets>
+    <fileset template="run_app">
+      <file name="Normal mode">
+        <var name="mode">normal</var>
+        <var name="server"></var>
+      </file>
+      <file name="Server mode">
+        <var name="mode">server</var>
+        <var name="server">/server</var>
+      </file>
+    </fileset>
+    <fileset template="run_client">
+      <file name="Client only"/>
+    </fileset>
+    <fileset template="publish">
+      <file name="Publish"/>
+    </fileset>
+    <fileset template="unreg_com">
+      <file name="Unregister COM"/>
+    </fileset>
+  </filesets>
+  <templates>
+
+    <template name="run_app" filename="run_${mode}.cmd" runnable="true" runexecutable="cmd.exe" runcommandline="/C &quot;{0}&quot;">
+<![CDATA[@echo off
+setlocal
+${cleanreg}
+
+del ${TARGET_DIR}\BackupTest?.bct
+del ${TARGET_DIR}\BackupTest?.txt
+echo. > ${TARGET_DIR}\BackupTest.new 
+
+reg import src\Resources\Common\Patches\InkConfig.reg
+
+reg import sim\reg\HeadConfig.reg
+reg import sim\reg\HeadVoltage.reg
+reg import sim\reg\TableMap.reg
+reg import sim\reg\DACParameters.reg
+reg import sim\reg\TableConfig.reg
+reg import sim\reg\Servo.reg
+reg import sim\reg\GantryStep.reg
+reg import sim\reg\Swath.reg
+
+reg import ink_kcmyxwvlclmx_ottawa.reg
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /v R2REnabled /t REG_DWORD /d ${R2REnabled} /f
+
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /v amsInstalled1 /t REG_DWORD /d ${AMSEnabled} /f
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1\InkMaintenanceConfig /v amsEnabled1 /t REG_DWORD /d ${AMSEnabled} /f
+
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /v OEMTag /t REG_DWORD /d ${model} /f
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /v OEMSubTag /t REG_DWORD /d 0 /f
+
+reg add HKCU\SOFTWARE\Oce\Aries\Configurations\Calgary_1 /v SerialNumber /t REG_DWORD /d 1357 /f
+
+regsvr32 /i:user /s /n bin\ArizonaObjectModel.dll bin\ObjectConnector.dll
+
+start %~dp0${TARGET_DIR}\JobControl.exe ${server} ${devmode} ${verbosity} "/jc_data_path:${JC_DATA_PATH}" ${simulation} ${monitor}
+endlocal
+]]>
+    </template>
+
+    <template name="run_client" filename="run_client.cmd" runnable="true" runexecutable="cmd.exe" runcommandline="/C &quot;{0}&quot;">
+<![CDATA[@echo off
+start %~dp0${TARGET_DIR}\ShadowsClient.exe ${devmode} ${monitor} %*
+]]>
+    </template>
+
+    <template name="publish" filename="publish_bin_${Product}_${Configuration}.cmd" runnable="true" runbuttontext="Publish"><![CDATA[@echo off
+setlocal                                                                                   -
+
+set SOURCE_DIR=src
+set TARGET_DIR=${TARGET_DIR}
+set VSVER=120
+set PLATFORM=x64
+set CONFIGURATION=${Configuration}
+set PRODUCT=${Product}
+
+if "%1"=="" goto skip_custom_platform
+set CONFIGURATION=%1
+
+:skip_custom_platform
+
+set PLATFORM_CONFIGURATION=%PLATFORM%\%CONFIGURATION%
+
+if not exist "%TARGET_DIR%" mkdir %TARGET_DIR%
+
+echo Systems...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\bin\%VSVER%\%PLATFORM_CONFIGURATION%\*.exe %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\bin\%VSVER%\%PLATFORM_CONFIGURATION%\*.dll %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\bin\%VSVER%\%PLATFORM_CONFIGURATION%\*.pdb %TARGET_DIR%\
+
+echo GUI...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\bin\%VSVER%\%PLATFORM%\%PRODUCT%-%CONFIGURATION%\*.exe %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\bin\%VSVER%\%PLATFORM%\%PRODUCT%-%CONFIGURATION%\*.dll %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\bin\%VSVER%\%PLATFORM%\%PRODUCT%-%CONFIGURATION%\*.pdb %TARGET_DIR%\
+
+echo Shadows...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\Shadows\bin\%CONFIGURATION%\*.exe %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\Shadows\bin\%CONFIGURATION%\*.dll %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\Shadows\bin\%CONFIGURATION%\*.pdb %TARGET_DIR%\
+
+echo Vision...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\VisionSystem\bin\%VSVER%\%PLATFORM_CONFIGURATION%\*.dll %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\VisionSystem\bin\%VSVER%\%PLATFORM_CONFIGURATION%\*.pdb %TARGET_DIR%\
+
+echo IntelPP and camera...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\third_party\VisionSystem\product\IntelIPP\%PLATFORM%\* %TARGET_DIR%\
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\third_party\VisionSystem\product\PtGrey\%PLATFORM_CONFIGURATION%\* %TARGET_DIR%\
+
+echo HTTP server...
+xcopy /s/e/z/y/q/d %SOURCE_DIR%\gui\http_server\* %TARGET_DIR%\
+
+echo. > %TARGET_DIR%\BackupTest.new
+
+endlocal
+]]>
+    </template>
+
+    <template name="unreg_com" filename="unregister_com.cmd" runnable="true"><![CDATA[@echo off
+regsvr32 /i:user /n /u bin\ArizonaObjectModel.dll bin\ObjectConnector.dll
+]]>
+    </template>
+
+  </templates>
+</config>
+
+

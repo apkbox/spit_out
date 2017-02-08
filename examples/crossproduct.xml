@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<config title="Cross product">
+	<filesets>
+		<fileset template="t1">
+			<file>
+				<var name="a">1</var>
+			</file>
+			<file>
+				<var name="a">2</var>
+			</file>
+		</fileset>
+		<fileset template="t2">
+			<file>
+				<var name="a">3</var>
+			</file>
+			<file>
+				<var name="a">4</var>
+			</file>
+		</fileset>
+	</filesets>
+	<templates>
+		<template name="t1" filename="file_${a}_1.txt"><![CDATA[${a} - 1
+]]></template>
+		<template name="t2" filename="file_${a}_2.txt"><![CDATA[${a} - 2
+]]></template>
+	</templates>
+</config>

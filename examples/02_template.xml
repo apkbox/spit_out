@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <templates>
+    <template filename="greeting.txt"><![CDATA[Hello, world!
+]]></template>
+  </templates>
+</config>

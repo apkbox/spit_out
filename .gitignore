@@ -1,0 +1,9 @@
+src/bin/
+*.user
+*.suo
+src/obj/
+Visual Studio 2013 Image Library/
+layout_test/layout_test/bin/
+layout_test/layout_test/obj/
+/bin/
+/obj/
