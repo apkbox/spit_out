@@ -4,6 +4,48 @@ Allows quickly generate file from template and set of parameters choosen in the 
 # Important note
 This app could be star destroyer, but I like it to be a small swiss army knife.
 
+# Variables
+Variables defined through `var` elements and referenced in template with
+`${name}`, where `name` is the variable name.
+
+Variable references can be used in the following places:
+* Selector's `active` attribute
+* Variable value (see `Double evaluation`)
+* Template `filename` attribute
+* Template content
+
+# Special variables
+In addition to regular variables, also predefined variables available.
+In the following list the square brackets `[]` denote optional parameter.
+
+    ${guid[:format]}
+Each occurence expands to new GUID. Optional format specifies the GUID string
+format.
+
+The following formats available:
+
+    N       00000000000000000000000000000000
+    D       00000000-0000-0000-0000-000000000000
+    B       {00000000-0000-0000-0000-000000000000}
+    P       (00000000-0000-0000-0000-000000000000)
+    X       {0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}}
+
+    ${env:name}
+Expands to an OS environment variable value or empty string if environment
+variable is not defined.
+
+    ${now[:format]}
+Each occurence expands to current date and time string. The optional format
+parameter can be used to specify custom formatting.
+
+    ${utcnow[:format]}
+Same as `now`, except that time is UTC.
+
+    ${var:name}
+Expands to an OS environmet variable value if environment variable is defined,
+otherwise expands to a normal variable reference. This construct allows to use
+normal variable with ability to override it with an environment variable.
+
 # Quick pick
 Quick picks allow quickly select specified selectors.
 Each quick pick specifies selector and choice names to set.

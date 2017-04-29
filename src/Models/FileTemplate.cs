@@ -13,7 +13,6 @@ namespace SpitOut.Models
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.CompilerServices;
-    using System.Text.RegularExpressions;
     using System.Windows.Input;
 
     using SpitOut.Annotations;

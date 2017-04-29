@@ -54,6 +54,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\DateReferenceHandler.cs" />
+    <Compile Include="Models\EnvReferenceHandler.cs" />
+    <Compile Include="Models\GuidReferenceHandler.cs" />
+    <Compile Include="Models\ISpecialReferenceHandler.cs" />
     <Compile Include="Models\Layout\ExpanderState.cs" />
     <Compile Include="Models\Layout\LayoutGroupType.cs" />
     <Compile Include="Models\Layout\HStackExpanderLayoutNode.cs" />
@@ -97,6 +101,7 @@
     <Compile Include="Models\Layout\VStackLayoutNode.cs" />
     <Compile Include="Models\Layout\WrapPanelLayoutNode.cs" />
     <Compile Include="Models\VarModel.cs" />
+    <Compile Include="Models\VarReferenceHandler.cs" />
     <Compile Include="Models\XmlConfigLoader.cs" />
     <Compile Include="SelectorTemplateSelector.cs" />
     <Compile Include="Views\MainView.xaml.cs">
