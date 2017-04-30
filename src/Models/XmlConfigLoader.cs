@@ -26,6 +26,10 @@ namespace SpitOut.Models
 
         private readonly XmlDocument doc = new XmlDocument();
 
+        private readonly XmlNameTable nt = new NameTable();
+
+        private XmlNamespaceManager ns;
+
         #endregion
 
         #region Public Methods and Operators
@@ -33,7 +37,7 @@ namespace SpitOut.Models
         public static ConfigModel LoadFromFile(string fileName)
         {
             var loader = new XmlConfigLoader();
-            loader.doc.Load(fileName);
+            loader.LoadDocumentInternal(fileName);
             loader.LoadInternal();
             loader.config.ConfigName = fileName;
             loader.config.FinalizeLoading();
@@ -64,6 +68,15 @@ namespace SpitOut.Models
             }
 
             return defaultValue;
+        }
+
+        private static ChoiceModel ParseChoiceElement(XmlElement choiceElement)
+        {
+            var choiceModel = new ChoiceModel();
+            WithAttributeDo(choiceElement, "label", label => choiceModel.Label = label);
+            WithAttributeDo(choiceElement, "name", name => choiceModel.Name = name);
+            ForEachElementDo(choiceElement, "var", v => ParseVarElement(v, choiceModel.Variables));
+            return choiceModel;
         }
 
         private static Brush ParseColor(string s)
@@ -127,15 +140,6 @@ namespace SpitOut.Models
             return fileTemplate;
         }
 
-        private static ChoiceModel ParseChoiceElement(XmlElement choiceElement)
-        {
-            var choiceModel = new ChoiceModel();
-            WithAttributeDo(choiceElement, "label", label => choiceModel.Label = label);
-            WithAttributeDo(choiceElement, "name", name => choiceModel.Name = name);
-            ForEachElementDo(choiceElement, "var", v => ParseVarElement(v, choiceModel.Variables));
-            return choiceModel;
-        }
-
         private static void ParseVarElement(XmlElement varElement, Dictionary<string, VarModel> variables)
         {
             var isExpression = false;
@@ -178,9 +182,19 @@ namespace SpitOut.Models
             }
         }
 
+        private void LoadDocumentInternal(string fileName)
+        {
+            using (var reader = new XmlTextReader(fileName, this.nt))
+            {
+                this.ns = new XmlNamespaceManager(this.nt);
+                reader.Namespaces = false;
+                this.doc.Load(reader);
+            }
+        }
+
         private void LoadInternal()
         {
-            var configElement = this.doc.SelectSingleNode("/config") as XmlElement;
+            var configElement = this.doc.SelectSingleNode("config") as XmlElement;
             if (configElement == null)
             {
                 return;
@@ -363,6 +377,23 @@ namespace SpitOut.Models
             WithAttributeDo(selectorElement, "hidden", n => selectorModel.IsHidden = bool.Parse(n));
             WithAttributeDo(selectorElement, "color", n => selectorModel.Color = ParseColor(n));
             WithAttributeDo(selectorElement, "bordercolor", n => selectorModel.BorderColor = ParseColor(n));
+
+            // textbox is different from other controls as it can affect only one variable
+            // and has no choices.
+            if (selectorModel.SelectorType == SelectorType.TextBox)
+            {
+                var vars = new Dictionary<string, VarModel>();
+                ParseVarElement(selectorElement.SelectSingleNode("var") as XmlElement, vars);
+                if (vars.Count > 0)
+                {
+                    var onlyVar = vars.First().Value;
+                    var onlyChoice = new ChoiceModel();
+                    onlyChoice.Variables.Add(onlyVar.Name, onlyVar);
+                    selectorModel.SelectedChoice = onlyChoice;
+                }
+
+                return selectorModel;
+            }
 
             ForEachElementDo(
                 selectorElement,

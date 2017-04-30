@@ -14,6 +14,8 @@ namespace SpitOut.Models
 
         ComboBox, 
 
-        CheckBox
+        CheckBox,
+
+        TextBox
     }
 }

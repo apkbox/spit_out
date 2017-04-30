@@ -33,6 +33,7 @@
       <xs:enumeration value="listbox"/>
       <xs:enumeration value="combobox"/>
       <xs:enumeration value="checkbox"/>
+      <xs:enumeration value="textbox"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -122,9 +123,12 @@
   </xs:complexType>
 
   <xs:complexType name="selector">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="choice" type="choice"/>
-    </xs:sequence>
+    <xs:choice>
+      <xs:element minOccurs="1" maxOccurs="1" name="var" type="var"/>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="choice" type="choice"/>
+      </xs:sequence>
+    </xs:choice>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="label" type="xs:string"/>
     <xs:attribute name="default" type="xs:string"/>

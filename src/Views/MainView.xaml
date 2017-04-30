@@ -19,6 +19,7 @@
             <DataTemplate x:Key="ListBoxSelectorTemplate">
                 <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
                         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
                         d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
@@ -40,6 +41,7 @@
             <DataTemplate x:Key="ComboBoxSelectorTemplate">
                 <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
                         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
                         d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
@@ -59,10 +61,30 @@
             <DataTemplate x:Key="CheckBoxSelectorTemplate">
                 <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
                         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
                         d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
                     <CheckBox Margin="5"
                               IsChecked="{Binding IsChecked}" Width="{Binding ControlWidth}"
                               VerticalAlignment="Center" Content="{Binding Label}"/>
+                </Border>
+            </DataTemplate>
+
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="TextBoxSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Label}" />
+                        <TextBox Grid.Row="1" Text="{Binding TextValue, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="{Binding ControlWidth}"
+                                  VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
             </DataTemplate>
 

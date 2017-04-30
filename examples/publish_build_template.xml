@@ -1,12 +1,18 @@
 <?xml version="1.0"?>
-<config title="Configure Arizona Build">
-    <selector name="INVARIANTS" hidden="true" default="DEFAULT">
-        <choice name="DEFAULT">
-            <var name="JC_DATA_PATH">D:\PFD\HB</var>
-            <var name="TARGET_DIR">bin</var>
-        </choice>
+<config title="Configure Arizona Build" xmlns="https://github.com/apkbox/spitout/spitout_schema_1.0.xsd">
+  <layout type="vstack">
+    <selector name="JC Data Path"/>
+    <selector name="bin dir"/>
+  </layout>
+  
+    <selector name="JC Data Path" type="textbox" width="150">
+        <var name="JC_DATA_PATH">D:\PFD\HB</var>
     </selector>
-
+  
+    <selector name="bin dir" type="textbox" width="150">
+        <var name="TARGET_DIR">bin</var>
+    </selector>
+  
     <selector name="Product" default="Ottawa_HB">
         <choice name="Bellingham_HB">
             <var name="Product">Bellingham_HB</var>

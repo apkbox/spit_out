@@ -11,6 +11,7 @@ namespace SpitOut.Models
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows.Media;
 
@@ -21,6 +22,8 @@ namespace SpitOut.Models
         #region Fields
 
         private readonly ConfigModel config;
+
+        private string cachedTextValueKey;
 
         private bool isActive = true;
 
@@ -55,6 +58,8 @@ namespace SpitOut.Models
         #region Public Properties
 
         public Brush BorderColor { get; set; }
+
+        public List<ChoiceModel> Choices { get; private set; }
 
         public Brush Color { get; set; }
 
@@ -163,7 +168,26 @@ namespace SpitOut.Models
 
         public SelectorType SelectorType { get; set; }
 
-        public List<ChoiceModel> Choices { get; private set; }
+        public string TextValue
+        {
+            get
+            {
+                var varModel = this.GetSingleVariable();
+                return varModel == null ? null : varModel.Value;
+            }
+
+            set
+            {
+                var varModel = this.GetSingleVariable();
+                if (varModel != null)
+                {
+                    varModel.Value = value;
+                }
+
+                this.OnPropertyChanged();
+                this.config.NotifySelectionChanged();
+            }
+        }
 
         #endregion
 
@@ -177,6 +201,16 @@ namespace SpitOut.Models
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private VarModel GetSingleVariable()
+        {
+            if (this.cachedTextValueKey == null)
+            {
+                this.cachedTextValueKey = this.selectedChoice.Variables.Keys.FirstOrDefault();
+            }
+
+            return this.cachedTextValueKey == null ? null : this.selectedChoice.Variables[this.cachedTextValueKey];
         }
 
         #endregion
