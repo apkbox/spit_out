@@ -72,7 +72,7 @@
                         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                         d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
                     <TextBox Margin="5"
-                             Text="{Binding Text}"
+                             Text="{Binding SingleVariable}"
                              Width="{Binding ControlWidth}"
                              VerticalAlignment="Center"/>
                 </Border>

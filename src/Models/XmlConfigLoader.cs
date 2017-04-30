@@ -364,102 +364,123 @@ namespace SpitOut.Models
             WithAttributeDo(selectorElement, "color", n => selectorModel.Color = ParseColor(n));
             WithAttributeDo(selectorElement, "bordercolor", n => selectorModel.BorderColor = ParseColor(n));
 
-            ForEachElementDo(
-                selectorElement,
-                "choice",
-                choiceElement => selectorModel.Choices.Add(ParseChoiceElement(choiceElement)));
-
-            // Check whether checkbox selector choices are booleans,
-            // otherwise switch to listbox.
-            if (selectorModel.SelectorType == SelectorType.CheckBox)
+            if (selectorModel.SelectorType == SelectorType.TextBox)
             {
-                if (selectorModel.Choices.Count > 2)
+                selectorModel.SelectedChoice = new ChoiceModel();
+                Dictionary<string, VarModel> vars = new Dictionary<string, VarModel>();
+                ParseVarElement(selectorElement.SelectSingleNode("var") as XmlElement, vars);
+                VarModel target = null;
+                if (vars.Count > 0)
                 {
-                    selectorModel.SelectorType = SelectorType.ListBox;
+                    target = vars.First().Value;
                 }
                 else
                 {
-                    bool hasTrue = false;
-                    bool hasFalse = false;
+                    target = new VarModel { Name = "default", Value =string.Empty};
+                }
+                selectorModel.SelectedChoice.Variables.Add(target.Name, target);
 
-                    // Should be exactly true and false, or one or these.
-                    foreach (var v in selectorModel.Choices)
+                return selectorModel;
+            }
+            else
+            {
+                ForEachElementDo(
+                    selectorElement,
+                    "choice",
+                    choiceElement => selectorModel.Choices.Add(ParseChoiceElement(choiceElement)));
+
+                // Check whether checkbox selector choices are booleans,
+                // otherwise switch to listbox.
+                if (selectorModel.SelectorType == SelectorType.CheckBox)
+                {
+                    if (selectorModel.Choices.Count > 2)
                     {
-                        bool result;
-                        if (bool.TryParse(v.Name, out result))
+                        selectorModel.SelectorType = SelectorType.ListBox;
+                    }
+                    else
+                    {
+                        bool hasTrue = false;
+                        bool hasFalse = false;
+
+                        // Should be exactly true and false, or one or these.
+                        foreach (var v in selectorModel.Choices)
                         {
-                            if (result)
+                            bool result;
+                            if (bool.TryParse(v.Name, out result))
                             {
-                                if (hasTrue)
+                                if (result)
                                 {
-                                    throw new Exception(
-                                        string.Format(
-                                            "More than one true choice defined for selector {0}",
-                                            selectorModel.Name));
-                                }
+                                    if (hasTrue)
+                                    {
+                                        throw new Exception(
+                                            string.Format(
+                                                "More than one true choice defined for selector {0}",
+                                                selectorModel.Name));
+                                    }
 
-                                hasTrue = true;
-                            }
-                            else
-                            {
-                                if (hasFalse)
+                                    hasTrue = true;
+                                }
+                                else
                                 {
-                                    throw new Exception(
-                                        string.Format(
-                                            "More than one true choice defined for selector {0}",
-                                            selectorModel.Name));
-                                }
+                                    if (hasFalse)
+                                    {
+                                        throw new Exception(
+                                            string.Format(
+                                                "More than one true choice defined for selector {0}",
+                                                selectorModel.Name));
+                                    }
 
-                                hasFalse = true;
+                                    hasFalse = true;
+                                }
                             }
                         }
-                    }
 
-                    if (!hasTrue)
-                    {
-                        selectorModel.Choices.Add(new ChoiceModel { Name = "true" });
-                    }
+                        if (!hasTrue)
+                        {
+                            selectorModel.Choices.Add(new ChoiceModel { Name = "true" });
+                        }
 
-                    if (!hasFalse)
-                    {
-                        selectorModel.Choices.Add(new ChoiceModel { Name = "false" });
+                        if (!hasFalse)
+                        {
+                            selectorModel.Choices.Add(new ChoiceModel { Name = "false" });
+                        }
                     }
                 }
-            }
 
-            // Define undefined variables as empty strings
-            var allKeys = new List<string>();
+                // Define undefined variables as empty strings
+                var allKeys = new List<string>();
 
-            // Collect all variable keys
-            foreach (var val in selectorModel.Choices)
-            {
-                allKeys = allKeys.Union(val.Variables.Keys).ToList();
-            }
-
-            // Add empty string variable to each choice where it is missing.
-            foreach (var choiceModel in selectorModel.Choices)
-            {
-                foreach (var key in allKeys)
+                // Collect all variable keys
+                foreach (var val in selectorModel.Choices)
                 {
-                    if (!choiceModel.Variables.ContainsKey(key))
+                    allKeys = allKeys.Union(val.Variables.Keys).ToList();
+                }
+
+                // Add empty string variable to each choice where it is missing.
+                foreach (var choiceModel in selectorModel.Choices)
+                {
+                    foreach (var key in allKeys)
                     {
-                        choiceModel.Variables[key] = new VarModel() { Name = key, Value = string.Empty };
+                        if (!choiceModel.Variables.ContainsKey(key))
+                        {
+                            choiceModel.Variables[key] = new VarModel() { Name = key, Value = string.Empty };
+                        }
                     }
                 }
-            }
 
-            // Set default
-            WithAttributeDo(
-                selectorElement,
-                "default",
-                n =>
+                // Set default
+                WithAttributeDo(
+                    selectorElement,
+                    "default",
+                    n =>
                     {
                         if (!string.IsNullOrWhiteSpace(n))
                         {
                             selectorModel.SelectedChoice = selectorModel.Choices.FirstOrDefault(o => o.Name == n);
                         }
                     });
-            return selectorModel;
+                return selectorModel;
+            }
         }
 
         #endregion

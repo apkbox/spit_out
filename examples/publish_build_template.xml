@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <config title="Configure Arizona Build">
-    <selector name="INVARIANTS" hidden="true" default="DEFAULT">
-        <choice name="DEFAULT">
-            <var name="JC_DATA_PATH">D:\PFD\HB</var>
-            <var name="TARGET_DIR">bin</var>
-        </choice>
+    <selector name="JC Data Path" type="textbox">
+        <var name="JC_DATA_PATH">D:\PFD\HB</var>
     </selector>
-
+  
+    <selector name="bin dir" type="textbox">
+        <var name="TARGET_DIR">bin</var>
+    </selector>
+  
     <selector name="Product" default="Ottawa_HB">
         <choice name="Bellingham_HB">
             <var name="Product">Bellingham_HB</var>

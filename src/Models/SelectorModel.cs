@@ -30,6 +30,8 @@ namespace SpitOut.Models
 
         private ChoiceModel selectedChoice;
 
+        private string cachedSingleVariableKey;
+
         #endregion
 
         #region Constructors and Destructors
@@ -164,6 +166,35 @@ namespace SpitOut.Models
         public SelectorType SelectorType { get; set; }
 
         public List<ChoiceModel> Choices { get; private set; }
+
+        public string SingleVariable
+        {
+            get
+            {
+                if (cachedSingleVariableKey == null)
+                {
+                    cachedSingleVariableKey = this.selectedChoice.Variables.FirstOrDefault();
+                }
+
+                if (cachedSingleVariableKey == null)
+                    return null;
+
+                return selectedChoice.Variables[cachedSingleVariableKey].Value;
+            }
+
+            set
+            {
+                if (cachedSingleVariableKey == null)
+                {
+                    cachedSingleVariableKey = this.selectedChoice.Variables.First().Key;
+                }
+
+                if (cachedSingleVariableKey == null)
+                    return;
+
+                selectedChoice.Variables[cachedSingleVariableKey].Value = value;
+            }
+        }
 
         #endregion
 
