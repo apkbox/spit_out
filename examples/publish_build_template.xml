@@ -5,7 +5,7 @@
     <selector name="bin dir"/>
   </layout>
   
-    <selector name="JC Data Path" type="textbox" width="150">
+    <selector name="JC Data Path" type="directory" width="150">
         <var name="JC_DATA_PATH">D:\PFD\HB</var>
     </selector>
   

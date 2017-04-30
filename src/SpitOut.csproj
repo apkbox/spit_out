@@ -54,6 +54,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\BrowseFileCommand.cs" />
+    <Compile Include="Models\BrowseFolderCommand.cs" />
+    <Compile Include="Models\BrowseForFolderHelper.cs" />
     <Compile Include="Models\DateReferenceHandler.cs" />
     <Compile Include="Models\EnvReferenceHandler.cs" />
     <Compile Include="Models\GuidReferenceHandler.cs" />

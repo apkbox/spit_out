@@ -6,16 +6,21 @@
 //   Defines the SelectorType type.
 // </summary>
 // --------------------------------------------------------------------------------
+
 namespace SpitOut.Models
 {
     public enum SelectorType
     {
-        ListBox, 
+        ListBox,
 
-        ComboBox, 
+        ComboBox,
 
         CheckBox,
 
-        TextBox
+        TextBox,
+
+        Directory,
+
+        File
     }
 }

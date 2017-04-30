@@ -380,7 +380,9 @@ namespace SpitOut.Models
 
             // textbox is different from other controls as it can affect only one variable
             // and has no choices.
-            if (selectorModel.SelectorType == SelectorType.TextBox)
+            if (selectorModel.SelectorType == SelectorType.TextBox
+                || selectorModel.SelectorType == SelectorType.Directory
+                || selectorModel.SelectorType == SelectorType.File)
             {
                 var vars = new Dictionary<string, VarModel>();
                 ParseVarElement(selectorElement.SelectSingleNode("var") as XmlElement, vars);

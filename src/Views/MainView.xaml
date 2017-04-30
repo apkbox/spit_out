@@ -88,6 +88,58 @@
                 </Border>
             </DataTemplate>
 
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="DirectorySelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Label}" Grid.ColumnSpan="2" />
+                        <TextBox Grid.Row="1" Grid.Column="0"
+                                 Text="{Binding TextValue, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="{Binding ControlWidth}"
+                                  VerticalAlignment="Center"/>
+                        <Button Grid.Row="1" Grid.Column="1" Content="Browse..."
+                                Command="{Binding BrowseDirectoryCommand}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="FileSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Left"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Label}" Grid.ColumnSpan="2" />
+                        <TextBox Grid.Row="1" Grid.Column="0"
+                                 Text="{Binding TextValue, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="{Binding ControlWidth}"
+                                  VerticalAlignment="Center"/>
+                        <Button Grid.Row="1" Grid.Column="1" Content="Browse..."
+                                Command="{Binding BrowseFileCommand}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type layout:VStackLayoutNode}">
                 <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
                     <ItemsControl ItemsSource="{Binding Children}">

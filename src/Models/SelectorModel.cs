@@ -13,6 +13,7 @@ namespace SpitOut.Models
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Windows.Input;
     using System.Windows.Media;
 
     using SpitOut.Annotations;
@@ -45,6 +46,8 @@ namespace SpitOut.Models
             this.IsActiveExpr = "true";
             this.ControlWidth = double.NaN;
             this.ControlHeight = double.NaN;
+            this.BrowseFileCommand = new BrowseFileCommand(this);
+            this.BrowseDirectoryCommand = new BrowseFolderCommand(this);
         }
 
         #endregion
@@ -58,6 +61,10 @@ namespace SpitOut.Models
         #region Public Properties
 
         public Brush BorderColor { get; set; }
+
+        public ICommand BrowseDirectoryCommand { get; private set; }
+
+        public ICommand BrowseFileCommand { get; private set; }
 
         public List<ChoiceModel> Choices { get; private set; }
 

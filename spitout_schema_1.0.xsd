@@ -34,6 +34,8 @@
       <xs:enumeration value="combobox"/>
       <xs:enumeration value="checkbox"/>
       <xs:enumeration value="textbox"/>
+      <xs:enumeration value="directory"/>
+      <xs:enumeration value="file"/>
     </xs:restriction>
   </xs:simpleType>
 
