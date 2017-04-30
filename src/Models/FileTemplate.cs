@@ -6,6 +6,7 @@
 //   Defines the FileTemplate type.
 // </summary>
 // --------------------------------------------------------------------------------
+
 namespace SpitOut.Models
 {
     using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace SpitOut.Models
         public FileTemplate()
         {
             this.showFileInWindowsExplorerCommand = new DelegateCommand<object>(
-                this.ExecuteShowInWindowsExplorer, 
+                this.ExecuteShowInWindowsExplorer,
                 this.CanExecuteShowInWindowsExplorer);
         }
 
@@ -72,6 +73,8 @@ namespace SpitOut.Models
         }
 
         public string ContentTemplate { get; set; }
+
+        public bool CreateDir { get; set; }
 
         public string FileName
         {
@@ -186,6 +189,7 @@ namespace SpitOut.Models
             newTemplate.name = this.name;
             newTemplate.ContentTemplate = this.ContentTemplate;
             newTemplate.FileNameTemplate = this.FileNameTemplate;
+            newTemplate.CreateDir = this.CreateDir;
             newTemplate.IsRunnable = this.IsRunnable;
             newTemplate.RunCommandLine = this.RunCommandLine;
             newTemplate.RunExecutable = this.RunExecutable;
@@ -224,6 +228,15 @@ namespace SpitOut.Models
                 return;
             }
 
+            if (this.CreateDir)
+            {
+                var dirName = Path.GetDirectoryName(this.FileName);
+                if (!string.IsNullOrEmpty(dirName))
+                {
+                    Directory.CreateDirectory(dirName);
+                }
+            }
+
             var writer = File.CreateText(this.FileName);
             writer.Write(this.Content);
             writer.Close();
@@ -252,9 +265,7 @@ namespace SpitOut.Models
                 return;
             }
 
-            Process.Start(
-                "explorer.exe", 
-                "/select," + Path.Combine(Directory.GetCurrentDirectory(), this.FileName));
+            Process.Start("explorer.exe", "/select," + Path.Combine(Directory.GetCurrentDirectory(), this.FileName));
         }
 
         #endregion

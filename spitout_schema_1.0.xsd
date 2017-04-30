@@ -186,6 +186,7 @@
       <xs:extension base="xs:string">
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="filename" type="xs:string" use="required"/>
+        <xs:attribute name="createdir" type="xs:boolean"/>
         <xs:attribute name="runnable" type="xs:boolean"/>
         <xs:attribute name="runexecutable" type="xs:string"/>
         <xs:attribute name="runcommandline" type="xs:string"/>

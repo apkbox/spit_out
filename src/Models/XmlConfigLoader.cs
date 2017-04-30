@@ -118,6 +118,7 @@ namespace SpitOut.Models
             var fileTemplate = new FileTemplate();
             WithAttributeDo(e, "name", n => fileTemplate.Name = n);
             WithAttributeDo(e, "filename", n => fileTemplate.FileNameTemplate = n);
+            WithAttributeDo(e, "createdir", n => fileTemplate.CreateDir = bool.Parse(n));
             WithAttributeDo(e, "runnable", n => fileTemplate.IsRunnable = bool.Parse(n));
             WithAttributeDo(e, "runexecutable", n => fileTemplate.RunExecutable = n);
             WithAttributeDo(e, "runcommandline", n => fileTemplate.RunCommandLine = n);
