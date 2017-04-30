@@ -66,6 +66,18 @@
                 </Border>
             </DataTemplate>
 
+            <!-- ReSharper disable once Xaml.RedundantResource -->
+            <DataTemplate x:Key="TextBoxSelectorTemplate">
+                <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1"
+                        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        d:DataContext="{d:DesignInstance Type=models:SelectorModel, IsDesignTimeCreatable=True}">
+                    <TextBox Margin="5"
+                             Text="{Binding Text}"
+                             Width="{Binding ControlWidth}"
+                             VerticalAlignment="Center"/>
+                </Border>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type layout:VStackLayoutNode}">
                 <Border Background="{Binding Color}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
                     <ItemsControl ItemsSource="{Binding Children}">
