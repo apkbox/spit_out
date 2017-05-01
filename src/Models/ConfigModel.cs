@@ -242,74 +242,8 @@ namespace SpitOut.Models
         {
             this.CompleteLayoutGeneration();
 
-            // Now if we have any filesets, generate new templates.
-            if (this.Filesets.Count > 0)
-            {
-                var filesetTemplates = new List<FileTemplate>();
-                foreach (var fileset in this.Filesets)
-                {
-                    var matchingTemplates = new List<FileTemplate>();
-                    var templateName = fileset.TemplateName;
-                    if (templateName != null)
-                    {
-                        matchingTemplates = this.Templates.Where(o => o.Name == templateName).ToList();
-                        if (matchingTemplates.Count == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        matchingTemplates.AddRange(this.Templates);
-                    }
-
-                    if (this.GroupBy == GroupingOrder.Template)
-                    {
-                        foreach (var matchingTemplate in matchingTemplates)
-                        {
-                            foreach (var file in fileset.Files)
-                            {
-                                var newTemplate = matchingTemplate.ExpandAsNew(file.Variables);
-                                if (!string.IsNullOrWhiteSpace(file.Name))
-                                {
-                                    newTemplate.Name = file.Name;
-                                }
-
-                                filesetTemplates.Add(newTemplate);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var file in fileset.Files)
-                        {
-                            foreach (var matchingTemplate in matchingTemplates)
-                            {
-                                var newTemplate = matchingTemplate.ExpandAsNew(file.Variables);
-                                if (!string.IsNullOrWhiteSpace(file.Name))
-                                {
-                                    newTemplate.Name = file.Name;
-                                }
-
-                                filesetTemplates.Add(newTemplate);
-                            }
-                        }
-                    }
-                }
-
-                this.ResolvedTemplates.Clear();
-                filesetTemplates.ForEach(t => this.ResolvedTemplates.Add(t));
-            }
-            else
-            {
-                this.ResolvedTemplates.Clear();
-                this.Templates.ForEach(t => this.ResolvedTemplates.Add(t));
-            }
-
             // Force initial template expansion
             this.NotifySelectionChanged();
-
-            this.SelectedTemplate = this.ResolvedTemplates.FirstOrDefault();
         }
 
         internal void NotifySelectionChanged()
@@ -321,11 +255,7 @@ namespace SpitOut.Models
             {
                 // Update selector active status. Note that the first selector cannot use variables (there are none),
                 // and each subsequent selector can only reference variables from previous selectors.
-                var normVars = this.CreateBooleanNormalizedList(variables);
-                var expr = selector.IsActiveExpr ?? "false";
-                var expandedExpr = TemplateExpander.ExpandTemplate(normVars, expr, null);
-                expandedExpr = TemplateExpander.ReplaceUnresolved(expandedExpr, "false");
-                selector.IsActive = ExpressionEvaluator.Evaluate(expandedExpr);
+                selector.IsActive = this.CalculateIsActiveStatus(variables, selector.IsActiveExpr ?? "false");
 
                 // Inactive selector cannot influence variables.
                 if (!selector.IsActive)
@@ -353,10 +283,31 @@ namespace SpitOut.Models
                 }
             }
 
+            this.GenerateResolvedTemplates(variables);
+
             foreach (var tpl in this.ResolvedTemplates)
             {
                 tpl.Expand(variables);
             }
+
+            // TODO: To prevent losing selection:
+            // 1. Generate unique id for each fileset/file/template and combination thereof.
+            // 2. GenerateResolvedTemplates does not update ResolvedTemplates, but rather returns
+            // a collection that can replace existing one if different.
+            // 3. Select template based on key.
+            // TODO: The other option:
+            // 1. Create resoved templates only once, but ombine active expr from fileset and 
+            // file '(fileset.active) or (file.active)' and assign this expression to the resolved template
+            // (stored in Templates as before).
+            // 2. Evaluate isActive of each template and add or remove from ResolvedTemplates based on result.
+            // 3. Still use unique ID for each template.
+            // TODO: ResolvedTemplates is a bad naming (on part of Resolved) because here "resolved" means all
+            // variables expanded.
+            // TODO: The expected behavior:
+            //  1. The selected tab remains selected.
+            //  2. If tab became inactive - select nearest tab.
+            //  3. Scroll position maintained.
+            this.SelectedTemplate = this.ResolvedTemplates.FirstOrDefault();
 
             this.saveAllCommand.RaiseCanExecuteChanged();
             this.runCommand.RaiseCanExecuteChanged();
@@ -370,6 +321,16 @@ namespace SpitOut.Models
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private bool CalculateIsActiveStatus(Dictionary<string, string> variables, string expr)
+        {
+            // Update selector active status. Note that the first selector cannot use variables (there are none),
+            // and each subsequent selector can only reference variables from previous selectors.
+            var normVars = this.CreateBooleanNormalizedList(variables);
+            var expandedExpr = TemplateExpander.ExpandTemplate(normVars, expr, null);
+            expandedExpr = TemplateExpander.ReplaceUnresolved(expandedExpr, "false");
+            return ExpressionEvaluator.Evaluate(expandedExpr);
         }
 
         private bool CanExecuteRun(object arg)
@@ -473,6 +434,100 @@ namespace SpitOut.Models
             }
 
             this.runCommand.RaiseCanExecuteChanged();
+        }
+
+        private void GenerateResolvedTemplates(Dictionary<string, string> variables)
+        {
+            // Now if we have any filesets, generate new templates.
+            if (this.Filesets.Count > 0)
+            {
+                var filesetTemplates = new List<FileTemplate>();
+                foreach (var fileset in this.Filesets)
+                {
+                    fileset.IsActive = this.CalculateIsActiveStatus(variables, fileset.IsActiveExpr ?? "false");
+                    if (!fileset.IsActive)
+                    {
+                        continue;
+                    }
+
+                    var matchingTemplates = new List<FileTemplate>();
+                    var templateName = fileset.TemplateName;
+                    if (templateName != null)
+                    {
+                        matchingTemplates = this.Templates.Where(o => o.Name == templateName).ToList();
+                        if (matchingTemplates.Count == 0)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        matchingTemplates.AddRange(this.Templates);
+                    }
+
+                    if (this.GroupBy == GroupingOrder.Template)
+                    {
+                        foreach (var matchingTemplate in matchingTemplates)
+                        {
+                            foreach (var file in fileset.Files)
+                            {
+                                file.IsActive = this.CalculateIsActiveStatus(variables, file.IsActiveExpr ?? "false");
+                                if (!file.IsActive)
+                                {
+                                    continue;
+                                }
+
+                                var newTemplate = matchingTemplate.ExpandAsNew(file.Variables);
+                                if (!string.IsNullOrWhiteSpace(file.Name))
+                                {
+                                    newTemplate.Name = file.Name;
+                                }
+
+                                filesetTemplates.Add(newTemplate);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var file in fileset.Files)
+                        {
+                            file.IsActive = this.CalculateIsActiveStatus(variables, file.IsActiveExpr ?? "false");
+                            if (!file.IsActive)
+                            {
+                                continue;
+                            }
+
+                            foreach (var matchingTemplate in matchingTemplates)
+                            {
+                                var newTemplate = matchingTemplate.ExpandAsNew(file.Variables);
+                                if (!string.IsNullOrWhiteSpace(file.Name))
+                                {
+                                    newTemplate.Name = file.Name;
+                                }
+
+                                filesetTemplates.Add(newTemplate);
+                            }
+                        }
+                    }
+                }
+
+                this.ResolvedTemplates.Clear();
+                filesetTemplates.ForEach(t => this.ResolvedTemplates.Add(t));
+            }
+            else
+            {
+                this.ResolvedTemplates.Clear();
+                foreach (var template in this.Templates)
+                {
+                    template.IsActive = this.CalculateIsActiveStatus(variables, template.IsActiveExpr ?? "false");
+                    if (!template.IsActive)
+                    {
+                        continue;
+                    }
+
+                    this.ResolvedTemplates.Add(template);
+                }
+            }
         }
 
         private void OnQuickpickChanged()

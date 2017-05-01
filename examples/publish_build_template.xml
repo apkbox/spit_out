@@ -134,6 +134,7 @@
     <selector name="Developer mode" default="true" type="checkbox">
         <choice name="true">
             <var name="devmode">/dev</var>
+            <var name="enable_reg">true</var>
         </choice>
     </selector>
 
@@ -160,7 +161,7 @@
     <fileset template="publish">
       <file name="Publish"/>
     </fileset>
-    <fileset template="unreg_com">
+    <fileset template="unreg_com" active="${enable_reg}">
       <file name="Unregister COM"/>
     </fileset>
   </filesets>
