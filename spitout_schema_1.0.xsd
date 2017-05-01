@@ -172,6 +172,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" name="file" type="file"/>
     </xs:sequence>
     <xs:attribute name="template" type="xs:string"/>
+    <xs:attribute name="active" type="xs:string" default="true"/>
   </xs:complexType>
 
   <xs:complexType name="file">
@@ -179,6 +180,7 @@
       <xs:element name="var" type="var"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="active" type="xs:string" default="true"/>
   </xs:complexType>
 
   <xs:complexType name="templates">
@@ -192,6 +194,7 @@
       <xs:extension base="xs:string">
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="filename" type="xs:string" use="required"/>
+        <xs:attribute name="active" type="xs:string" default="true"/>
         <xs:attribute name="createdir" type="xs:boolean"/>
         <xs:attribute name="runnable" type="xs:boolean"/>
         <xs:attribute name="runexecutable" type="xs:string"/>

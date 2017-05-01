@@ -32,6 +32,8 @@ namespace SpitOut.Models
 
         private string name;
 
+        private bool isActive = true;
+
         #endregion
 
         #region Constructors and Destructors
@@ -41,6 +43,7 @@ namespace SpitOut.Models
             this.showFileInWindowsExplorerCommand = new DelegateCommand<object>(
                 this.ExecuteShowInWindowsExplorer,
                 this.CanExecuteShowInWindowsExplorer);
+            this.IsActiveExpr = "true";
         }
 
         #endregion
@@ -169,6 +172,28 @@ namespace SpitOut.Models
         }
 
         #endregion
+
+        public bool IsActive
+        {
+            get
+            {
+                return this.isActive;
+            }
+
+            set
+            {
+                if (value.Equals(this.isActive))
+                {
+                    return;
+                }
+
+                this.isActive = value;
+                //this.IsVisible = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string IsActiveExpr { get; set; }
 
         #region Methods
 
