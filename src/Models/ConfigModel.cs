@@ -11,6 +11,7 @@ namespace SpitOut.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
@@ -48,7 +49,7 @@ namespace SpitOut.Models
             this.Quickpicks = new List<QuickpickModel>();
             this.Selectors = new List<SelectorModel>();
             this.Filesets = new List<Fileset>();
-            this.Templates = new List<FileTemplate>();
+            this.Templates = new ObservableCollection<FileTemplate>();
             this.WindowWidth = 800;
             this.WindowHeight = 600;
             this.SelectorsUi = SelectorsVisibility.Visible;
@@ -211,7 +212,7 @@ namespace SpitOut.Models
             }
         }
 
-        public List<FileTemplate> Templates { get; private set; }
+        public ObservableCollection<FileTemplate> Templates { get; private set; }
 
         public string Title
         {
@@ -248,7 +249,7 @@ namespace SpitOut.Models
                     var templateName = fileset.TemplateName;
                     if (templateName != null)
                     {
-                        matchingTemplates = this.Templates.FindAll(o => o.Name == templateName).ToList();
+                        matchingTemplates = this.Templates.Where(o => o.Name == templateName).ToList();
                         if (matchingTemplates.Count == 0)
                         {
                             continue;
@@ -294,7 +295,7 @@ namespace SpitOut.Models
                 }
 
                 this.Templates.Clear();
-                this.Templates.AddRange(filesetTemplates);
+                filesetTemplates.ForEach(t => this.Templates.Add(t));
             }
 
             // Force initial template expansion
