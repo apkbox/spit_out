@@ -49,7 +49,8 @@ namespace SpitOut.Models
             this.Quickpicks = new List<QuickpickModel>();
             this.Selectors = new List<SelectorModel>();
             this.Filesets = new List<Fileset>();
-            this.Templates = new ObservableCollection<FileTemplate>();
+            this.Templates = new List<FileTemplate>();
+            this.ResolvedTemplates = new ObservableCollection<FileTemplate>();
             this.WindowWidth = 800;
             this.WindowHeight = 600;
             this.SelectorsUi = SelectorsVisibility.Visible;
@@ -100,6 +101,8 @@ namespace SpitOut.Models
         public string QuickpicksLabel { get; internal set; }
 
         public double QuickpicksWidth { get; internal set; }
+
+        public ObservableCollection<FileTemplate> ResolvedTemplates { get; private set; }
 
         public string RunButtonCaption
         {
@@ -212,7 +215,7 @@ namespace SpitOut.Models
             }
         }
 
-        public ObservableCollection<FileTemplate> Templates { get; private set; }
+        public List<FileTemplate> Templates { get; private set; }
 
         public string Title
         {
@@ -294,14 +297,19 @@ namespace SpitOut.Models
                     }
                 }
 
-                this.Templates.Clear();
-                filesetTemplates.ForEach(t => this.Templates.Add(t));
+                this.ResolvedTemplates.Clear();
+                filesetTemplates.ForEach(t => this.ResolvedTemplates.Add(t));
+            }
+            else
+            {
+                this.ResolvedTemplates.Clear();
+                this.Templates.ForEach(t => this.ResolvedTemplates.Add(t));
             }
 
             // Force initial template expansion
             this.NotifySelectionChanged();
 
-            this.SelectedTemplate = this.Templates.FirstOrDefault();
+            this.SelectedTemplate = this.ResolvedTemplates.FirstOrDefault();
         }
 
         internal void NotifySelectionChanged()
@@ -345,7 +353,7 @@ namespace SpitOut.Models
                 }
             }
 
-            foreach (var tpl in this.Templates)
+            foreach (var tpl in this.ResolvedTemplates)
             {
                 tpl.Expand(variables);
             }
@@ -396,7 +404,7 @@ namespace SpitOut.Models
 
         private bool CanExecuteSaveAll(object arg)
         {
-            return this.Templates.All(o => o.IsResolved && !string.IsNullOrWhiteSpace(o.FileName));
+            return this.ResolvedTemplates.All(o => o.IsResolved && !string.IsNullOrWhiteSpace(o.FileName));
         }
 
         private void CompleteLayoutGeneration()
@@ -452,7 +460,7 @@ namespace SpitOut.Models
                 return;
             }
 
-            foreach (var template in this.Templates)
+            foreach (var template in this.ResolvedTemplates)
             {
                 try
                 {

@@ -389,7 +389,7 @@
                         ContentTemplate="{StaticResource SelectorsExpandablePanel}"
                         Visibility="{Binding ShowSelectors, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <TabControl Grid.Row="2" ItemsSource="{Binding Templates}" Margin="5"
+        <TabControl Grid.Row="2" ItemsSource="{Binding ResolvedTemplates}" Margin="5"
                     ContentTemplate="{StaticResource FilePanel}"
                     SelectedItem="{Binding SelectedTemplate}">
             <TabControl.ItemTemplate>
