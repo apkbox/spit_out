@@ -17,11 +17,14 @@ namespace SpitOut.Models
         public FilesetFile()
         {
             this.Variables = new Dictionary<string, string>();
+            this.IsActiveExpr = "true";
         }
 
         #endregion
 
         #region Public Properties
+
+        public string IsActiveExpr { get; set; }
 
         public string Name { get; set; }
 

@@ -17,6 +17,7 @@ namespace SpitOut.Models
         public Fileset()
         {
             this.Files = new List<FilesetFile>();
+            this.IsActiveExpr = "true";
         }
 
         #endregion
@@ -24,6 +25,8 @@ namespace SpitOut.Models
         #region Public Properties
 
         public List<FilesetFile> Files { get; private set; }
+
+        public string IsActiveExpr { get; set; }
 
         public string TemplateName { get; set; }
 

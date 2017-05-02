@@ -30,6 +30,8 @@ namespace SpitOut.Models
 
         private string fileName;
 
+        private bool isActive = true;
+
         private string name;
 
         #endregion
@@ -41,6 +43,7 @@ namespace SpitOut.Models
             this.showFileInWindowsExplorerCommand = new DelegateCommand<object>(
                 this.ExecuteShowInWindowsExplorer,
                 this.CanExecuteShowInWindowsExplorer);
+            this.IsActiveExpr = "true";
         }
 
         #endregion
@@ -100,6 +103,28 @@ namespace SpitOut.Models
         }
 
         public string FileNameTemplate { get; set; }
+
+        public bool IsActive
+        {
+            get
+            {
+                return this.isActive;
+            }
+
+            set
+            {
+                if (value.Equals(this.isActive))
+                {
+                    return;
+                }
+
+                this.isActive = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string IsActiveExpr { get; set; }
 
         public bool IsIncomplete
         {

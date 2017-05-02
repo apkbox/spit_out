@@ -94,6 +94,7 @@ namespace SpitOut.Models
         {
             var filesetFile = new FilesetFile();
             WithAttributeDo(f, "name", n => filesetFile.Name = n);
+            WithAttributeDo(f, "active", n => filesetFile.IsActiveExpr = n);
             ForEachElementDo(f, "var", varNode => ParseFilesetFileVarElement(varNode, filesetFile.Variables));
             return filesetFile;
         }
@@ -102,6 +103,7 @@ namespace SpitOut.Models
         {
             var fileset = new Fileset();
             WithAttributeDo(e, "template", n => fileset.TemplateName = n);
+            WithAttributeDo(e, "active", n => fileset.IsActiveExpr = n);
             ForEachElementDo(e, "file", f => fileset.Files.Add(ParseFileElement(f)));
             return fileset;
         }
@@ -131,6 +133,7 @@ namespace SpitOut.Models
             var fileTemplate = new FileTemplate();
             WithAttributeDo(e, "name", n => fileTemplate.Name = n);
             WithAttributeDo(e, "filename", n => fileTemplate.FileNameTemplate = n);
+            WithAttributeDo(e, "active", n => fileTemplate.IsActiveExpr = n);
             WithAttributeDo(e, "createdir", n => fileTemplate.CreateDir = bool.Parse(n));
             WithAttributeDo(e, "runnable", n => fileTemplate.IsRunnable = bool.Parse(n));
             WithAttributeDo(e, "runexecutable", n => fileTemplate.RunExecutable = n);
