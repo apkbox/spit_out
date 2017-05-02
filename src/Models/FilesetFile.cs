@@ -12,7 +12,6 @@ namespace SpitOut.Models
 
     public class FilesetFile
     {
-        private bool isActive = true;
         #region Constructors and Destructors
 
         public FilesetFile()
@@ -28,26 +27,6 @@ namespace SpitOut.Models
         public string Name { get; set; }
 
         public Dictionary<string, string> Variables { get; private set; }
-
-        public bool IsActive
-        {
-            get
-            {
-                return this.isActive;
-            }
-
-            set
-            {
-                if (value.Equals(this.isActive))
-                {
-                    return;
-                }
-
-                this.isActive = value;
-                //this.IsVisible = value;
-                //this.OnPropertyChanged();
-            }
-        }
 
         public string IsActiveExpr { get; set; }
 

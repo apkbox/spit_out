@@ -389,9 +389,18 @@
                         ContentTemplate="{StaticResource SelectorsExpandablePanel}"
                         Visibility="{Binding ShowSelectors, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <TabControl Grid.Row="2" ItemsSource="{Binding ResolvedTemplates}" Margin="5"
+        <TabControl Grid.Row="2" ItemsSource="{Binding Templates}" Margin="5"
                     ContentTemplate="{StaticResource FilePanel}"
                     SelectedItem="{Binding SelectedTemplate}">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Resources>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
