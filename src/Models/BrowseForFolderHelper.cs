@@ -14,6 +14,7 @@ namespace SpitOut.Models
     using System.Runtime.InteropServices;
     using System.Text;
 
+#pragma warning disable CS0414
     public class BrowseForFolderHelper
     {
         // Constants for sending and receiving messages in BrowseCallBackProc
@@ -174,7 +175,7 @@ namespace SpitOut.Models
         // To get the actual path, you need to parse the returned PIDL
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
 
-        // static extern uint SHGetPathFromIDList(IntPtr pidl, [MarshalAs(UnmanagedType.LPWStr)] 
+        // static extern uint SHGetPathFromIDList(IntPtr pidl, [MarshalAs(UnmanagedType.LPWStr)]
         // StringBuilder pszPath);
         private static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
 

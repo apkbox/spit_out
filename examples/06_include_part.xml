@@ -1,0 +1,11 @@
+  <selector label="Select person">
+    <choice label="Brian">
+      <var name="person">Brian</var>
+    </choice>
+    <choice label="Dennis">
+      <var name="person">Dennis</var>
+    </choice>
+    <choice label="Ken">
+      <var name="person">Ken</var>
+    </choice>
+  </selector>

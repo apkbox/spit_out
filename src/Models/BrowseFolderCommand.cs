@@ -32,9 +32,9 @@ namespace SpitOut.Models
         #endregion
 
         #region Public Events
-
+#pragma warning disable CS0067
         public event EventHandler CanExecuteChanged;
-
+#pragma warning restore CS0067
         #endregion
 
         #region Public Methods and Operators

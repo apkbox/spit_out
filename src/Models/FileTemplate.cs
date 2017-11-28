@@ -71,7 +71,7 @@ namespace SpitOut.Models
                 }
 
                 this.content = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("Content");
             }
         }
 
@@ -94,7 +94,7 @@ namespace SpitOut.Models
                 }
 
                 this.fileName = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("FileName");
                 if (string.IsNullOrEmpty(this.name))
                 {
                     this.OnPropertyChanged("Name");
@@ -120,7 +120,7 @@ namespace SpitOut.Models
 
                 this.isActive = value;
 
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("IsActive");
             }
         }
 
@@ -159,7 +159,7 @@ namespace SpitOut.Models
                 }
 
                 this.name = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("Name");
             }
         }
 
@@ -269,7 +269,11 @@ namespace SpitOut.Models
         }
 
         [NotifyPropertyChangedInvocator]
+#if DOTNET_45
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+#else
+        protected virtual void OnPropertyChanged(string propertyName = null)
+#endif
         {
             PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null)

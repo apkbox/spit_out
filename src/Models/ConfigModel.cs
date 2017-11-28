@@ -140,7 +140,7 @@ namespace SpitOut.Models
 
                 this.selectedQuickpick = value;
                 this.OnQuickpickChanged();
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("SelectedQuickpick");
             }
         }
 
@@ -159,7 +159,7 @@ namespace SpitOut.Models
                 }
 
                 this.selectedTemplate = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("SelectedTemplate");
                 this.OnPropertyChanged("RunButtonCaption");
                 this.OnPropertyChanged("IsCurrentTemplateRunnable");
                 this.runCommand.RaiseCanExecuteChanged();
@@ -296,7 +296,11 @@ namespace SpitOut.Models
         }
 
         [NotifyPropertyChangedInvocator]
+#if DOTNET_45
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+#else
+        protected virtual void OnPropertyChanged(string propertyName = null)
+#endif
         {
             var handler = this.PropertyChanged;
             if (handler != null)

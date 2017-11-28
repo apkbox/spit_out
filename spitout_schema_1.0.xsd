@@ -74,7 +74,10 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="quickpicks" type="quickpicks"/>
       <xs:element minOccurs="0" name="layout" type="layout"/>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="selector" type="selector"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="selector" type="selector"/>
+        <xs:element name="include" type="include"/>
+      </xs:choice>
       <xs:element minOccurs="0" name="filesets" type="filesets"/>
       <xs:element minOccurs="0" name="templates" type="templates"/>
     </xs:sequence>
@@ -141,6 +144,10 @@
     <xs:attribute name="height" type="uilength"/>
     <xs:attribute name="color" type="xs:string"/>
     <xs:attribute name="bordercolor" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="include">
+    <xs:attribute name="file" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="choice">

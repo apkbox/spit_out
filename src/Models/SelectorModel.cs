@@ -90,7 +90,7 @@ namespace SpitOut.Models
 
                 this.isActive = value;
                 this.IsVisible = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("IsActive");
             }
         }
 
@@ -133,7 +133,7 @@ namespace SpitOut.Models
                 }
 
                 this.isVisible = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("IsVisible");
             }
         }
 
@@ -167,7 +167,7 @@ namespace SpitOut.Models
                 }
 
                 this.selectedChoice = value;
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("SelectedChoice");
                 this.OnPropertyChanged("IsChecked");
                 this.config.NotifySelectionChanged();
             }
@@ -191,7 +191,7 @@ namespace SpitOut.Models
                     varModel.Value = value;
                 }
 
-                this.OnPropertyChanged();
+                this.OnPropertyChanged("TextValue");
                 this.config.NotifySelectionChanged();
             }
         }
@@ -201,7 +201,11 @@ namespace SpitOut.Models
         #region Methods
 
         [NotifyPropertyChangedInvocator]
+#if DOTNET_45
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+#else
+        protected virtual void OnPropertyChanged(string propertyName = null)
+#endif
         {
             var handler = this.PropertyChanged;
             if (handler != null)

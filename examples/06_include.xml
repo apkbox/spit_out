@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <include file="06_include_part.xml"/>
+  <templates>
+    <template filename="greeting_to_${person}.txt"><![CDATA[Hello, ${person}!
+]]>
+    </template>
+  </templates>
+</config>

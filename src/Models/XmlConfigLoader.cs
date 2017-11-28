@@ -11,6 +11,8 @@ namespace SpitOut.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Windows;
     using System.Windows.Media;
@@ -38,7 +40,7 @@ namespace SpitOut.Models
         {
             var loader = new XmlConfigLoader();
             loader.LoadDocumentInternal(fileName);
-            loader.LoadInternal();
+            loader.LoadInternal(Path.GetDirectoryName(Path.GetFullPath(fileName)));
             loader.config.ConfigName = fileName;
             loader.config.FinalizeLoading();
             return loader.config;
@@ -195,13 +197,29 @@ namespace SpitOut.Models
             }
         }
 
-        private void LoadInternal()
+        private void LoadInternal(string basePath)
         {
             var configElement = this.doc.SelectSingleNode("config") as XmlElement;
             if (configElement == null)
             {
                 return;
             }
+
+            ForEachElementDo(
+                this.doc,
+                "/config/include",
+                e =>
+                    {
+                        var fragment = this.ParseInclude(e, basePath);
+                        while(fragment.ChildNodes.Count > 0)
+                        {
+                            var node = fragment.RemoveChild(fragment.FirstChild);
+                            Debug.WriteLine(string.Format("node=>{0}", node.Name));
+                            configElement.InsertBefore(node, e);
+                        }
+
+                        configElement.RemoveChild(e);
+                    });
 
             WithAttributeDo(configElement, "width", n => this.config.WindowWidth = StringToLength(n));
             WithAttributeDo(configElement, "height", n => this.config.WindowHeight = StringToLength(n));
@@ -366,6 +384,19 @@ namespace SpitOut.Models
             ForEachElementDo(layoutElement, "*", node => layoutNode.Children.Add(this.ParseLayoutElement(node, true)));
 
             return layoutNode;
+        }
+
+        private XmlDocumentFragment ParseInclude(XmlElement includeElement, string basePath)
+        {
+            var fileName = includeElement.GetAttribute("file");
+            fileName = Path.Combine(basePath, fileName);
+            var docFragment = this.doc.CreateDocumentFragment();
+            using (var reader = new StreamReader(fileName))
+            {
+                docFragment.InnerXml = reader.ReadToEnd();
+            }
+
+            return docFragment;
         }
 
         private SelectorModel ParseSelector(XmlElement selectorElement)
