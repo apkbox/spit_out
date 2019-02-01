@@ -4,14 +4,102 @@ Allows quickly generate file from template and set of parameters choosen in the 
 # Important note
 This app could be star destroyer, but I like it to be a small swiss army knife.
 
+# Selectors
+A selector represents a user interface element that can be used to set variables.
+
+The following selectors are available
+  * `listbox` List box
+  * `combobox` Combo box
+  * `checkbox` Check box
+  * `textbox` Text box
+  * `directory` Directory selector
+  * `file` File selector
+  
+Each selector is identified by name attribute which is used to reference it in quickpick
+or layout sections. Name is alse acts as a UI label, unless label attribute is explicitly
+specified.
+
+Some selector types have restrictions on syntax, like a text box that can set only one
+variable.
+
+The following attributes are common for all selectors:
+  * `label` Specifies a display label of the control. If not specified, `name` is used.
+  * `name` Specifies internal name of the selector if it needs to be referenced in
+    quickpick or layout.
+  * `type` Specifies selector type. Default is `listbox`.
+  * `width` Width of the selector in pixels.
+  * `height` Height of the selector in pixels.
+  * `active` A boolean value specifying whether selector is enabled. This can be a variable reference.
+  * `hidden` A boolean value specifying whether selector is hidden. This can be a variable reference.
+     This is a common way to define constants.
+  * `color` Specifies a color name or RGB value of the control foreground.
+  * `bordercolor` Specifies a color name or RGB value of control's border.
+  
+## ListBox
+The selector defines a single selection list box. If selector type is not explicitly
+specified this is a default selector type.
+
+The `default` attribute identifies default selected `choice` element by name.
+
+One or more `choice` elements specify items of the list box. Each choice element can specify
+`name` attribute that is used in selector\`s `default` attribute and `label` can be used to
+specify UI text of the choice. If `label` is not specified then `name` is used instead.
+
+Each choice can define zero or more variables.
+
+```xml
+    <selector name="Platform" default="x64" type="listbox">
+        <choice name="Win32">
+            <var name="Platform">Win32</var>
+        </choice>
+        <choice name="x64">
+            <var name="Platform">x64</var>
+        </choice>
+    </selector>
+```
+
+## ComboBox
+The selector defines a combo box. And functionally equivalent to list box.
+
+## CheckBox
+The selector is similar to list box, but can contain no more than two choices.
+If more than two choices specified it defaults to list box.
+
+Two choices must be named exactly `true` and `false`.
+```xml
+    <selector name="Log into file" default="true" type="checkbox">
+        <choice name="true">
+            <var name="LOG_SWITCH">/log:logfile.log</var>
+        </choice>
+        <choice name="false">
+            <var name="LOG_SWITCH">/log-to-console</var>
+        </choice>
+    </selector>
+```
+
+## TextBox, Directory, File
+Three selector types that present a text box. In case of Directory and
+File an additional button is shown beside the text box to select directory
+or file.
+
+This selector does not have choices but rather defines a single variable.
+The `default` attribute is meaningless and ignored.
+
+```xml
+    <selector name="Log location" type="directory">
+        <var name="LOG_DIR">C:\Logs</var>
+    </selector>
+```
+
+
 # Variables
 Variables defined through `var` elements and referenced in template with
 `${name}`, where `name` is the variable name.
 
 Variable references can be used in the following places:
 * Selector's `active` attribute
-* Variable value (see `Double evaluation`)
-* Template `filename` attribute
+* As another variable's value (see `Double evaluation`)
+* Template's `filename` attribute
 * Template content
 
 # Special variables
