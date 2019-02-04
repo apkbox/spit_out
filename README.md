@@ -161,10 +161,23 @@ You can override width and height of the selector in layout.
 **Important:** The expander that may be shown when quick picks are used is not affected
 by the custom layout. To control it use selectorspanel attribute of quickpicks.
 
+The available layout types are
+  * `wrappanel` - UI elements flow from left to right, top to bottom.
+  * `uniformgrid` - Each element is placed in a grid, where each cell is equal sized
+  * `vstack` - Elements are organized in a vertical stack
+  * `hstack` - Elements are organized in a horizontal stack
+  
+Each layout element can additionally grouped into a labeled and expandable group
+  * `none` - Ordinary group. `label` attribute is ignored
+  * `simple` - A simple group that can have label specified with `label` attribute.
+  * `expander` - An expander group that user can expand and collapse.
+    The initial state of the expander can be specified with `expander` attribute that can be either
+    `expanded` or `collapsed`. The default state is `expanded`.
+
 ```xml
 
 <layouts>
-  <layout type="grid">
+  <layout type="uniformgrid">
     <selector row="0" column="0" name="name"/>
     <layout row="0" column="1" type="vstack">
       <selector name="a" height="100"/>
