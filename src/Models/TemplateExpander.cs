@@ -16,9 +16,9 @@ namespace SpitOut.Models
     {
         #region Constants
 
-        private const string SpecialRefPattern = @"\$\{([\w_-[\d]][\w_]*)(?:\:([^}]+))?\}";
+        private const string SpecialRefPattern = @"\{([\w_-[\d]][\w_]*)(?:\:([^}]+))?\}";
 
-        private const string VariableRefPattern = @"\$\{([\w_-[\d]][\w_]*)\}";
+        private const string VariableRefPattern = @"\{([\w_-[\d]][\w_]*)\}";
 
         #endregion
 
@@ -41,9 +41,17 @@ namespace SpitOut.Models
         internal static string ExpandTemplate(
             Dictionary<string, string> variables,
             string template,
+            string variablePatternPrefix,
             HashSet<string> unresolvedTags)
         {
-            var rx = new Regex(SpecialRefPattern);
+            if (string.IsNullOrEmpty(variablePatternPrefix))
+            {
+                variablePatternPrefix = "$";
+            }
+
+            var maskedVariablePatternPrefix = GetMaskedVariablePrefix(variablePatternPrefix);
+
+            var rx = new Regex(maskedVariablePatternPrefix + SpecialRefPattern);
             var matches = rx.Matches(template);
             var offset = 0;
             foreach (Match match in matches)
@@ -63,12 +71,12 @@ namespace SpitOut.Models
 
             foreach (var variable in variables)
             {
-                template = template.Replace("${" + variable.Key + "}", variable.Value);
+                template = template.Replace(variablePatternPrefix + "{" + variable.Key + "}", variable.Value);
             }
 
             if (unresolvedTags != null)
             {
-                rx = new Regex(VariableRefPattern);
+                rx = new Regex(maskedVariablePatternPrefix + VariableRefPattern);
                 matches = rx.Matches(template);
                 foreach (Match match in matches)
                 {
@@ -79,10 +87,27 @@ namespace SpitOut.Models
             return template;
         }
 
-        internal static string ReplaceUnresolved(string template, string value)
+        internal static string ReplaceUnresolved(string template, string value,
+                        string variablePatternPrefix)
         {
-            var rx = new Regex(VariableRefPattern);
+            if (variablePatternPrefix == string.Empty)
+            {
+                variablePatternPrefix = "$";
+            }
+
+            var rx = new Regex(GetMaskedVariablePrefix(variablePatternPrefix) + VariableRefPattern);
             return rx.Replace(template, value);
+        }
+
+        private static string GetMaskedVariablePrefix(string prefix)
+        {
+            string maskedVariablePatternPrefix = string.Empty;
+            foreach (var c in prefix)
+            {
+                maskedVariablePatternPrefix += @"\" + c;
+            }
+
+            return maskedVariablePatternPrefix;
         }
 
         #endregion

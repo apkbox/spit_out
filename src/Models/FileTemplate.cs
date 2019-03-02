@@ -193,6 +193,11 @@ namespace SpitOut.Models
             }
         }
 
+        public string VariablePlaceholderPrefix
+        {
+            get; set;
+        }
+
         #endregion
 
         #region Methods
@@ -200,8 +205,10 @@ namespace SpitOut.Models
         internal void Expand(Dictionary<string, string> variables)
         {
             this.unresolvedVariables.Clear();
-            this.Content = TemplateExpander.ExpandTemplate(variables, this.ContentTemplate, this.unresolvedVariables);
-            this.FileName = TemplateExpander.ExpandTemplate(variables, this.FileNameTemplate, this.unresolvedVariables);
+            this.Content = TemplateExpander.ExpandTemplate(variables, this.ContentTemplate,
+                this.VariablePlaceholderPrefix, this.unresolvedVariables);
+            this.FileName = TemplateExpander.ExpandTemplate(variables, this.FileNameTemplate,
+                this.VariablePlaceholderPrefix, this.unresolvedVariables);
             this.OnPropertyChanged("UnresolvedVariables");
             this.OnPropertyChanged("UnresolvedVariablesList");
             this.OnPropertyChanged("IsResolved");

@@ -270,6 +270,7 @@ namespace SpitOut.Models
                             variables[variable.Key] = TemplateExpander.ExpandTemplate(
                                 variables,
                                 variable.Value.Value,
+                                null,
                                 null);
                         }
                         else
@@ -310,8 +311,8 @@ namespace SpitOut.Models
             // Update selector active status. Note that the first selector cannot use variables (there are none),
             // and each subsequent selector can only reference variables from previous selectors.
             var normVars = this.CreateBooleanNormalizedList(variables);
-            var expandedExpr = TemplateExpander.ExpandTemplate(normVars, expr, null);
-            expandedExpr = TemplateExpander.ReplaceUnresolved(expandedExpr, "false");
+            var expandedExpr = TemplateExpander.ExpandTemplate(normVars, expr, null, null);
+            expandedExpr = TemplateExpander.ReplaceUnresolved(expandedExpr, "false", null);
             return ExpressionEvaluator.Evaluate(expandedExpr);
         }
 
